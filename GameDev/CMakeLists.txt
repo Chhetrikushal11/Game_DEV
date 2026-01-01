@@ -33,27 +33,44 @@ message(STATUS "Populating GLM...")
 FetchContent_MakeAvailable(glm)
 
 # ============================================
-# Local Libraries
+# Find System Libraries
 # ============================================
-# GLAD
-add_library(glad STATIC "${CMAKE_SOURCE_DIR}/external/glad/src/glad.c")
-target_include_directories(glad PUBLIC "${CMAKE_SOURCE_DIR}/external/glad/include")
+find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
 
-# GLEW
-add_library(glew STATIC "${CMAKE_SOURCE_DIR}/external/glew/src/glew.c")
-target_include_directories(glew PUBLIC "${CMAKE_SOURCE_DIR}/external/glew/include")
-target_compile_definitions(glew PUBLIC GLEW_STATIC)
+# ============================================
+# Create Engine Library
+# ============================================
+set(ENGINE_SOURCE_FILES 
+    "src/Engine/source/Engine.cpp"
+    "src/Engine/source/Application.cpp"
+)
+
+set(ENGINE_HEADER_FILES 
+    "include/Engine/source/Engine.h"
+    "include/Engine/source/Application.h"
+)
+
+add_library(${PROJECT_NAME}_Engine STATIC 
+    ${ENGINE_SOURCE_FILES}
+    ${ENGINE_HEADER_FILES}
+)
+
+target_include_directories(${PROJECT_NAME}_Engine PUBLIC "${CMAKE_SOURCE_DIR}/include")
 
 # ============================================
 # Executable Setup
 # ============================================
 add_executable(GameDevExecutable "src/main.cpp")
+
 target_link_libraries(GameDevExecutable
     PRIVATE
-        glad
-        glew
+        ${PROJECT_NAME}_Engine
+        GLEW::GLEW
         glfw
         glm::glm
-        opengl32
+        OpenGL::GL
+        ${CMAKE_DL_LIBS}
 )
+
 target_include_directories(GameDevExecutable PRIVATE "${CMAKE_SOURCE_DIR}/include")

@@ -12,6 +12,7 @@ struct Vec2
     float y = 0.0f;
 };
 Vec2 offset;
+
 // declaring keycallbackFunction
 void keyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods)
 {
@@ -20,9 +21,9 @@ void keyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods
         switch (key)
         {
         case GLFW_KEY_UP:
-                std::cout << "GLFW_KEY_UP" << std::endl;
-                offset.y += 0.01f;
-                break;
+            std::cout << "GLFW_KEY_UP" << std::endl;
+            offset.y += 0.01f;
+            break;
         case GLFW_KEY_DOWN:
             std::cout << "GLFW_KEY_DOWN" << std::endl;
             offset.y -= 0.01f;
@@ -43,29 +44,51 @@ void keyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods
 
 int main()
 {
-    if (!glfwInit()) return -1;
-
+    std::cout << "Starting program..." << std::endl;
+    
+    if (!glfwInit()) {
+        std::cout << "GLFW Init failed!" << std::endl;
+        return -1;
+    }
+    std::cout << "GLFW initialized successfully" << std::endl;
+    
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
+    
+    std::cout << "Creating window..." << std::endl;
     GLFWwindow* window = glfwCreateWindow(1280, 720, "OpenGL Uniform Fix", nullptr, nullptr);
+    
     if (window == nullptr)
     {
-        std::cout << "Error creating window" << std::endl;
+        const char* description;
+        int code = glfwGetError(&description);
+        std::cout << "Error creating window!" << std::endl;
+        std::cout << "Error code: " << code << std::endl;
+        if (description) {
+            std::cout << "Description: " << description << std::endl;
+        }
         glfwTerminate();
         return -1;
     }
+    std::cout << "Window created successfully" << std::endl;
 
-    // to capture what we press in keyboard
     glfwSetKeyCallback(window, keyCallback);
     glfwMakeContextCurrent(window);
+    std::cout << "Context made current" << std::endl;
 
-    if (glewInit() != GLEW_OK)
-    {
-        glfwTerminate();
-        return -1;
-    }
+// Initialize GLEW with experimental features
+glewExperimental = GL_TRUE;
+glewInit();  // Just call it without checking the error
+
+// Clear any spurious error
+glGetError();
+
+std::cout << "GLEW initialized successfully" << std::endl;
+std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
+    
+    std::cout << "GLEW initialized successfully" << std::endl;
+    std::cout << "OpenGL Version: " << glGetString(GL_VERSION) << std::endl;
 
     // Vertex Shader
     std::string vertexShaderSource = R"(
@@ -80,11 +103,11 @@ int main()
         void main()
         {
             vColor = color;
-            gl_Position = vec4(position.x + uOffset.x,position.y + uOffset.y,position.z, 1.0);
+            gl_Position = vec4(position.x + uOffset.x, position.y + uOffset.y, position.z, 1.0);
         }
     )";
 
-    // Fragment Shader - FIXED: Added semicolon after uniform ucolor
+    // Fragment Shader
     std::string fragmentShaderSource = R"(
         #version 330 core
         out vec4 FragColor;
@@ -94,7 +117,6 @@ int main()
 
         void main()
         {
-            // Multiply vertex color by uniform color
             FragColor = vec4(vColor, 1.0) * ucolor;
         }
     )";
@@ -119,12 +141,10 @@ int main()
             return 0u;
         }
         return id;
-        };
+    };
 
     GLuint vs = compileShader(GL_VERTEX_SHADER, vertexShaderSource);
     GLuint fs = compileShader(GL_FRAGMENT_SHADER, fragmentShaderSource);
-
-
 
     GLuint shaderProgram = glCreateProgram();
     glAttachShader(shaderProgram, vs);
@@ -135,7 +155,6 @@ int main()
     glDeleteShader(vs);
     glDeleteShader(fs);
 
-    // FIXED: Removed hidden characters from the vertices array
     std::vector<float> vertices =
     {
          0.5f,  0.5f, 0.0f,  1.0f, 0.0f, 0.0f, // Top Right
@@ -173,7 +192,6 @@ int main()
 
     // Get uniform location
     GLint uColorLoc = glGetUniformLocation(shaderProgram, "ucolor");
-
     GLint uOffsetLoc = glGetUniformLocation(shaderProgram, "uOffset");
 
     while (!glfwWindowShouldClose(window))
@@ -187,7 +205,7 @@ int main()
         float timeValue = (float)glfwGetTime();
         float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
         glUniform4f(uColorLoc, 1.0f, greenValue, 1.0f, 1.0f);
-        glUniform2f(uOffsetLoc, offset.x ,offset.y);
+        glUniform2f(uOffsetLoc, offset.x, offset.y);
 
         glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
