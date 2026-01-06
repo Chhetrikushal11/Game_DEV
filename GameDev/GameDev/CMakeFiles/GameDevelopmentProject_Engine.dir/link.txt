@@ -1,0 +1,2 @@
+/usr/bin/ar qc libGameDevelopmentProject_Engine.a CMakeFiles/GameDevelopmentProject_Engine.dir/src/Engine/source/Engine.cpp.o CMakeFiles/GameDevelopmentProject_Engine.dir/src/Engine/source/Application.cpp.o
+/usr/bin/ranlib libGameDevelopmentProject_Engine.a

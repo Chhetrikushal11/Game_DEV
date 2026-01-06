@@ -44,11 +44,15 @@ find_package(GLEW REQUIRED)
 set(ENGINE_SOURCE_FILES 
     "src/Engine/source/Engine.cpp"
     "src/Engine/source/Application.cpp"
+    "src/Engine/source/Game.cpp"
 )
 
 set(ENGINE_HEADER_FILES 
     "include/Engine/source/Engine.h"
     "include/Engine/source/Application.h"
+    "include/Engine/source/eng.h"
+    "include/Engine/source/Game.h"
+
 )
 
 add_library(${PROJECT_NAME}_Engine STATIC 
