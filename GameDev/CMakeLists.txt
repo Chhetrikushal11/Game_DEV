@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.20)
 project(GameDevelopmentProject VERSION 1.0.0 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)  # Add this line
+
 include(FetchContent)
 
 # ============================================
@@ -52,12 +54,20 @@ set(ENGINE_HEADER_FILES
     "include/Engine/source/Application.h"
     "include/Engine/source/eng.h"
     "include/Engine/source/Game.h"
-
 )
 
 add_library(${PROJECT_NAME}_Engine STATIC 
     ${ENGINE_SOURCE_FILES}
     ${ENGINE_HEADER_FILES}
+)
+
+# Link libraries to Engine (CRITICAL FIX)
+target_link_libraries(${PROJECT_NAME}_Engine
+    PUBLIC
+        GLEW::GLEW
+        glfw
+        glm::glm
+        OpenGL::GL
 )
 
 target_include_directories(${PROJECT_NAME}_Engine PUBLIC "${CMAKE_SOURCE_DIR}/include")
@@ -70,10 +80,6 @@ add_executable(GameDevExecutable "src/main.cpp")
 target_link_libraries(GameDevExecutable
     PRIVATE
         ${PROJECT_NAME}_Engine
-        GLEW::GLEW
-        glfw
-        glm::glm
-        OpenGL::GL
         ${CMAKE_DL_LIBS}
 )
 

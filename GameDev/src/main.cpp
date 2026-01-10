@@ -10,7 +10,7 @@ int main()
     engine.SetApplication(gameApp);
 
     // now if initialize of engine is successful then run the engine
-    if(engine.Init())
+    if(engine.Init(1280, 720, "Game DEV Engine"))
     {
         engine.Run();
         std::cout << "Engine run completed, now destroying..." << std::endl;

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <chrono>
 
+struct GLFWwindow;
 namespace GAMEDEV_ENGINE 
 {
     // Forward declaration: Tells the compiler "Application" exists 
@@ -14,7 +15,7 @@ namespace GAMEDEV_ENGINE
         Engine();
         ~Engine();
 
-        bool Init();
+        bool Init(int width, int height, const char* title);
         virtual  void Run();
         virtual void Destroy();
 
@@ -26,5 +27,6 @@ namespace GAMEDEV_ENGINE
     private:
         Application* _mApplication; // Raw pointer
         std::chrono::high_resolution_clock::time_point _mLastFrameTime;
+        
     };
 }
