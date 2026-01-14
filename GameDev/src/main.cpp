@@ -5,7 +5,7 @@ int main()
 {
     GAMEDEV_ENGINE::Game* gameApp = new GAMEDEV_ENGINE::Game();
     // need to create engine instance
-    GAMEDEV_ENGINE::Engine engine;
+    GAMEDEV_ENGINE::Engine& engine = GAMEDEV_ENGINE::Engine::GetInstance();
     // now pass the game to engine
     engine.SetApplication(gameApp);
 

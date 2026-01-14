@@ -1,20 +1,21 @@
 #pragma once
 
-
- namespace GAMEDEV_ENGINE 
- {
+namespace GAMEDEV_ENGINE
+{
     class Application
     {
-        public:
-            Application();
-            ~Application();
-
-            virtual  bool Init();
-            virtual void Update(float deltaTime);
-            virtual void Destroy();
-            void SetNeedsToClosed(bool needsToClose);    
-            bool NeedsToClosed() const;
-        private:
-            bool _mNeedsToClose;
+    public:
+        Application();
+        virtual ~Application();
+        
+        virtual bool Init() = 0;
+        virtual void Update(float deltaTime) = 0;
+        virtual void Destroy() = 0;
+        
+        void SetNeedsToClosed(bool needsToClose);    
+        bool NeedsToClosed() const;
+        
+    private:
+        bool _mNeedsToClose;
     };
- }
+}

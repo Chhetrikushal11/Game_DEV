@@ -47,6 +47,9 @@ set(ENGINE_SOURCE_FILES
     "src/Engine/source/Engine.cpp"
     "src/Engine/source/Application.cpp"
     "src/Engine/source/Game.cpp"
+    "src/Engine/source/input/InputManager.cpp"
+    "src/Engine/source/graphics/ShaderProgram.cpp"
+    "src/Engine/source/graphics/GraphicsAPI.cpp"
 )
 
 set(ENGINE_HEADER_FILES 
@@ -54,8 +57,10 @@ set(ENGINE_HEADER_FILES
     "include/Engine/source/Application.h"
     "include/Engine/source/eng.h"
     "include/Engine/source/Game.h"
+    "include/Engine/source/input/InputManager.h"
+    "include/Engine/source/graphics/ShaderProgram.h"
+    "include/Engine/source/graphics/GraphicsAPI.h"
 )
-
 add_library(${PROJECT_NAME}_Engine STATIC 
     ${ENGINE_SOURCE_FILES}
     ${ENGINE_HEADER_FILES}

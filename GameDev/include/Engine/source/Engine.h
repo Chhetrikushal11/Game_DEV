@@ -1,32 +1,49 @@
+// Engine.h
 #pragma once
 #include <iostream>
 #include <chrono>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include "Engine/source/input/InputManager.h"
+#include "Engine/source/graphics/GraphicsAPI.h"
 
-struct GLFWwindow;
 namespace GAMEDEV_ENGINE 
 {
-    // Forward declaration: Tells the compiler "Application" exists 
-    // without needing to #include "Application.h" here.
     class Application; 
 
     class Engine
     {
-    public:
-        Engine();
-        ~Engine();
-
-        bool Init(int width, int height, const char* title);
-        virtual  void Run();
-        virtual void Destroy();
-
-        // FIX: Removed "Engine::" from the member declaration
-        void SetApplication(Application* app);
-        
-        Application* GetApplication() const ;
-
     private:
-        Application* _mApplication; // Raw pointer
-        std::chrono::high_resolution_clock::time_point _mLastFrameTime;
+        static Engine* _sInstance;
+        static GraphicsAPI* _sGraphicsAPI;  // ✅ Static POINTER (not reference)
         
+        Engine();
+        Engine(const Engine&) = delete;
+        Engine& operator=(const Engine&) = delete;
+        Engine(Engine&&) = delete;
+        Engine& operator=(Engine&&) = delete;
+        
+    public:
+        ~Engine();
+        
+        static Engine& GetInstance();
+        
+        bool Init(int width, int height, const char* title);
+        void Run();
+        void Destroy();
+        
+        void SetApplication(Application* app);
+        Application* GetApplication() const;
+        
+        InputManager& GetInputManager();
+        void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+        
+        static GraphicsAPI& GetGraphicsAPI();  // ✅ Returns reference
+        
+    private:
+        Application* _mApplication;
+        std::chrono::high_resolution_clock::time_point _mLastFrameTime;
+        GLFWwindow* _gWindow;
+        InputManager _mInputManager;
     };
 }

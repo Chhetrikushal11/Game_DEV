@@ -1,5 +1,7 @@
 #pragma once
-#include "Engine/source/eng.h"
+#include "Engine/source/eng.h"  // ✅ Use eng.h
+#include "Engine/source/Application.h"
+
 
 namespace GAMEDEV_ENGINE 
 {
