@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 #include "Engine/source/input/InputManager.h"
 #include "Engine/source/graphics/GraphicsAPI.h"
+#include "Engine/source/render/RenderQueue.h"
 
 namespace GAMEDEV_ENGINE 
 {
@@ -39,11 +40,14 @@ namespace GAMEDEV_ENGINE
         void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
         
         static GraphicsAPI& GetGraphicsAPI();  // ✅ Returns reference
+
+        RenderQueue& GetRenderQueue()  { return _mRenderQueue; } 
         
     private:
         Application* _mApplication;
         std::chrono::high_resolution_clock::time_point _mLastFrameTime;
         GLFWwindow* _gWindow;
         InputManager _mInputManager;
+        RenderQueue _mRenderQueue;
     };
 }

@@ -114,40 +114,47 @@ bool Engine::Init(int width, int height, const char* title)
     // ============================================
     // Run
     // ============================================
-    void Engine::Run()
+void Engine::Run()
+{
+    if(!_mApplication)
     {
-        if(!_mApplication)
-        {
-            std::cerr << "Application not set!" << std::endl;
-            return;
-        }
-
-        if (!_gWindow)
-        {
-            std::cerr << "Window not created!" << std::endl;
-            return;
-        }
-        
-        std::cout << "Starting game loop..." << std::endl;
-        _mLastFrameTime = std::chrono::high_resolution_clock::now();
-        
-        while(!glfwWindowShouldClose(_gWindow) && !_mApplication->NeedsToClosed())
-        {
-            auto currentFrameTime = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<float> deltaTime = currentFrameTime - _mLastFrameTime;
-            _mLastFrameTime = currentFrameTime;
-            
-            glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
-            
-            _mApplication->Update(deltaTime.count());
-            
-            glfwSwapBuffers(_gWindow);
-            glfwPollEvents();
-        }
-        
-        std::cout << "Game loop ended" << std::endl;
+        std::cerr << "Application not set!" << std::endl;
+        return;
     }
+
+    if (!_gWindow)
+    {
+        std::cerr << "Window not created!" << std::endl;
+        return;
+    }
+    
+    std::cout << "Starting game loop..." << std::endl;
+    _mLastFrameTime = std::chrono::high_resolution_clock::now();
+    
+    while(!glfwWindowShouldClose(_gWindow) && !_mApplication->NeedsToClosed())
+    {
+        glfwPollEvents();
+        
+        auto currentFrameTime = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<float> deltaTime = currentFrameTime - _mLastFrameTime;
+        _mLastFrameTime = currentFrameTime;
+        
+        // ✅ 1. CLEAR FIRST (at the beginning)
+        _sGraphicsAPI->SetClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+        _sGraphicsAPI->ClearBuffers();
+        
+        // ✅ 2. UPDATE (submits render commands)
+        _mApplication->Update(deltaTime.count());
+        
+        // ✅ 3. DRAW (renders submitted commands)
+        _mRenderQueue.Draw(*_sGraphicsAPI);
+        
+        // ✅ 4. SWAP BUFFERS (show result)
+        glfwSwapBuffers(_gWindow);
+    }
+    
+    std::cout << "Game loop ended" << std::endl;
+}
 
     // ============================================
     // Destroy
@@ -207,4 +214,5 @@ bool Engine::Init(int width, int height, const char* title)
             _mInputManager.SetKeyPressed(key, false);
         }
     }
+
 }

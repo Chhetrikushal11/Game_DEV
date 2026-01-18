@@ -4,9 +4,11 @@
 #include <iostream>
 #include <memory>
 #include <string>
+
 #include "Engine/source/graphics/GraphicsAPI.h"
 #include "Engine/source/graphics/ShaderProgram.h"
-
+#include "Engine/source/render/material.h"
+#include "Engine/source/render/mesh.h"
 namespace GAMEDEV_ENGINE
 {
     // this method will get the vertex and fragment shader source code as strings, compile shaders and link them to crate a shader program, Return shader program instance
@@ -89,6 +91,65 @@ namespace GAMEDEV_ENGINE
     void GraphicsAPI::BindShaderProgram(ShaderProgram* shaderProgram)
     {
         shaderProgram->Bind();
+    }
+
+    void GraphicsAPI::BindMaterial(Material* material)
+    {
+        if(material)
+        {
+            material->Bind();
+        }
+        
+    }
+
+    GLuint GraphicsAPI::CreateVertexBuffer(const std::vector<float>& vertices)
+    {
+        GLuint VBO = 0;
+        glGenBuffers(1, &VBO); // generate vertex buffer object
+        glBindBuffer(GL_ARRAY_BUFFER, VBO); // bind the vertex buffer object
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW); // upload the vertex data to GPU
+        glBindBuffer(GL_ARRAY_BUFFER, 0); // unbind the vertex buffer object
+        return VBO; // return the vertex
+    }
+
+     GLuint GraphicsAPI::CreateIndexBuffer(const std::vector<uint32_t>& indices)
+     {
+        GLuint EBO = 0;
+        glGenBuffers(1, &EBO); // generate element buffer object
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); // bind the element buffer object
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint32_t), indices.data(), GL_STATIC_DRAW); // upload the index data to GPU
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // unbind the element buffer object
+        return EBO; // return the element buffer object
+     }
+
+
+    void GraphicsAPI::BindMesh(Mesh* mesh)
+    {
+        if(mesh)
+        {
+            mesh->Bind();
+        }
+        
+    }
+
+
+    void GraphicsAPI::DrawMesh(Mesh* mesh)
+    {
+        if(mesh)
+        {
+            mesh->Draw();
+        }
+        
+    }
+
+    void GraphicsAPI::SetClearColor(float r, float g, float b, float a)
+    {
+        glClearColor(r, g, b, a);
+    }
+
+    void GraphicsAPI::ClearBuffers()
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
     }
 
 }

@@ -33,6 +33,8 @@ namespace GAMEDEV_ENGINE
         void SetUniform1i(const std::string& name, int value);
         void SetUniform1f(const std::string& name, float value);
        
+        // for SetUnifrom for 2f
+        void SetUniform2f(const std::string& name,float v0, float v1);
         private:
             GLuint _mShaderProgramID = 0; // for storing the shader program ID
             // need to create an array to store the uniform locations for local caching to avoid multiple glGetUniformLocation calls

@@ -59,4 +59,14 @@ namespace GAMEDEV_ENGINE
         glUniform1f(GetUniformLocation(name), value);
     }   
 
+    void ShaderProgram::SetUniform2f(const std::string& name, float v0, float v1)
+    {
+        glUniform2f(GetUniformLocation(name), v0, v1);
+    }   
+
+    
+
+
+
+
 } // namespace GAMEDEV_ENGINE

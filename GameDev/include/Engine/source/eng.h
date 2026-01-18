@@ -11,3 +11,6 @@
 #include "Engine/source/input/InputManager.h"
 #include "Engine/source/graphics/ShaderProgram.h"
 #include "Engine/source/graphics/GraphicsAPI.h"
+#include "Engine/source/render/material.h"
+#include "Engine/source/render/mesh.h"
+#include "Engine/source/render/RenderQueue.h"

@@ -50,6 +50,9 @@ set(ENGINE_SOURCE_FILES
     "src/Engine/source/input/InputManager.cpp"
     "src/Engine/source/graphics/ShaderProgram.cpp"
     "src/Engine/source/graphics/GraphicsAPI.cpp"
+    "src/Engine/source/render/material.cpp"
+    "src/Engine/source/render/mesh.cpp"
+    "src/Engine/source/render/RenderQueue.cpp"
 )
 
 set(ENGINE_HEADER_FILES 
@@ -60,6 +63,10 @@ set(ENGINE_HEADER_FILES
     "include/Engine/source/input/InputManager.h"
     "include/Engine/source/graphics/ShaderProgram.h"
     "include/Engine/source/graphics/GraphicsAPI.h"
+    "include/Engine/source/render/material.h"
+    "include/Engine/source/render/mesh.h"
+    "include/Engine/source/graphics/VertexLayout.h"
+    "include/Engine/source/render/RenderQueue.h"
 )
 add_library(${PROJECT_NAME}_Engine STATIC 
     ${ENGINE_SOURCE_FILES}
