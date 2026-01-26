@@ -14,27 +14,42 @@ bool Game::Init()
         #version 330 core
         layout(location = 0) in vec3 aPos;
         layout(location = 1) in vec3 aColor;
-
+        
         out vec3 vertexColor;
-
+        
         uniform vec2 uOffset;
+        
         void main()
         {
-            gl_Position = vec4(aPos.x + uOffset.x , aPos.y + uOffset.y, aPos.z, 1.0);
+            gl_Position = vec4(aPos.x + uOffset.x, aPos.y + uOffset.y, aPos.z, 1.0);
             vertexColor = aColor;
         }
     )";
     
+    // ✅ UPDATED FRAGMENT SHADER - with sine wave!
     std::string fragmentShader = R"(
         #version 330 core
         in vec3 vertexColor;
         out vec4 FragColor;
+        
+        uniform float uTime;  // ✅ Time uniform
+        
         void main()
         {
-            FragColor = vec4(vertexColor, 1.0);
+            // Three different frequency sine waves
+            float wave1 = sin(uTime * 1.0) * 0.5 + 0.5;
+            float wave2 = sin(uTime * 2.0) * 0.5 + 0.5;
+            float wave3 = sin(uTime * 3.0) * 0.5 + 0.5;
+            
+            // Method 1: Pulse brightness
+            vec3 pulsedColor;
+            pulsedColor.r = vertexColor.r * wave1;
+            pulsedColor.g = vertexColor.g * wave2;
+            pulsedColor.b = vertexColor.b * wave3;
+            
+            FragColor = vec4(pulsedColor, 1.0);
         }
     )";
-    
     auto& graphicsAPI = Engine::GetInstance().GetGraphicsAPI();
     auto shaderProgram = graphicsAPI.CreateShaderProgram(vertexShader, fragmentShader);
     // after shader program initialization we need to set the shader program to material
@@ -120,8 +135,11 @@ bool Game::Init()
            _mOffsetY -= 0.01f; // to move downward
         }
 
+        _mTime += deltaTime; // to accumulate time
+
 
         _mMaterial.SetFloatParams2f("uOffset", _mOffsetX, _mOffsetY);
+         _mMaterial.SetFloatParams("uTime", _mTime); // this ensures time is updated every frame
 
        // to prepare render command
        RenderCommand command;

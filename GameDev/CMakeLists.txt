@@ -53,6 +53,8 @@ set(ENGINE_SOURCE_FILES
     "src/Engine/source/render/material.cpp"
     "src/Engine/source/render/mesh.cpp"
     "src/Engine/source/render/RenderQueue.cpp"
+    "src/Engine/source/scene/Scene.cpp"
+    "src/Engine/source/scene/GameObject.cpp"
 )
 
 set(ENGINE_HEADER_FILES 
@@ -67,6 +69,8 @@ set(ENGINE_HEADER_FILES
     "include/Engine/source/render/mesh.h"
     "include/Engine/source/graphics/VertexLayout.h"
     "include/Engine/source/render/RenderQueue.h"
+    "include/Engine/source/scene/Scene.h"
+    "include/Engine/source/scene/GameObject.h"
 )
 add_library(${PROJECT_NAME}_Engine STATIC 
     ${ENGINE_SOURCE_FILES}

@@ -17,7 +17,7 @@ namespace GAMEDEV_ENGINE
         _mLastFrameTime(std::chrono::high_resolution_clock::now()),
         _gWindow(nullptr),
         _mInputManager()
-        // ❌ Remove _mGraphicsAPI initialization - it's static now!
+        
     {
         _sInstance = this;
         std::cout << "Engine created" << std::endl;
