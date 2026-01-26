@@ -14,3 +14,5 @@
 #include "Engine/source/render/material.h"
 #include "Engine/source/render/mesh.h"
 #include "Engine/source/render/RenderQueue.h"
+#include "Engine/source/scene/Scene.h"
+#include "Engine/source/scene/GameObject.h"

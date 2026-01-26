@@ -1,6 +1,7 @@
 #pragma once
 
 #include <GL/glew.h>
+#include <glm/mat4x4.hpp>
 #include <string>
 #include <unordered_map>
 
@@ -35,6 +36,9 @@ namespace GAMEDEV_ENGINE
        
         // for SetUnifrom for 2f
         void SetUniform2f(const std::string& name,float v0, float v1);
+
+        // to use matrix 4x4 for seting uniform
+        void SetUniformMat4f(const std::string& name, const glm::mat4& mat);
         private:
             GLuint _mShaderProgramID = 0; // for storing the shader program ID
             // need to create an array to store the uniform locations for local caching to avoid multiple glGetUniformLocation calls

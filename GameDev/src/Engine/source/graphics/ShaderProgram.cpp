@@ -1,4 +1,5 @@
 #include <iostream>
+#include <glm/gtc/type_ptr.hpp> // for glm::value_ptr    
 #include "Engine/source/graphics/ShaderProgram.h"
 
 namespace GAMEDEV_ENGINE 
@@ -62,7 +63,18 @@ namespace GAMEDEV_ENGINE
     void ShaderProgram::SetUniform2f(const std::string& name, float v0, float v1)
     {
         glUniform2f(GetUniformLocation(name), v0, v1);
-    }   
+    } 
+    
+    void ShaderProgram::SetUniformMat4f(const std::string& name, const glm::mat4& mat)
+    {
+        glUniformMatrix4fv(GetUniformLocation(name),1, GL_FALSE, glm::value_ptr(mat));
+        // here first paramter is the location of the uniform variable
+        // second parameter is the count of matrices to be sent
+        // third parameter is whether to transpose the matrix or not
+        // fourth parameter is the pointer to the first element of the matrix
+        // glm::value_ptr(mat) returns the pointer to the first element of the matrix
+       
+    }
 
     
 

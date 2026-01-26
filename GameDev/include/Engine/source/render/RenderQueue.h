@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <glm/mat4x4.hpp>
 
 namespace GAMEDEV_ENGINE
 {
@@ -17,6 +18,7 @@ namespace GAMEDEV_ENGINE
     {
         Mesh* mesh = nullptr; // to get the mesh data
         Material* material = nullptr;
+        glm::mat4 modelMatrix = glm::mat4(1.0f); // this will store world transform for each object
     };
 
 

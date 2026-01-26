@@ -27,6 +27,9 @@ namespace GAMEDEV_ENGINE
         // now to bind the material 
         void Bind() const;
 
+        // here we add get method for ShaderProgram
+        ShaderProgram* GetShaderProgram() const {return _mShaderProgram.get();}
+
         private :
         std::shared_ptr<ShaderProgram> _mShaderProgram;
         std::unordered_map<std::string, float> _mFloatParams;

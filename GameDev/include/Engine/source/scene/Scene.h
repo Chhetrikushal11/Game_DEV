@@ -24,7 +24,8 @@ namespace GAMEDEV_ENGINE
         auto gameObject = new T(); // create a new GameObject
         _mRootGameObjects.emplace_back(gameObject); // store it in the root game objects
         gameObject->SetName(name);
-        gameObject->SetParent(gameObject, parent);
+       // gameObject->SetParent(gameObject, parent);
+        gameObject->SetParent(parent);
         return gameObject;
 
         }

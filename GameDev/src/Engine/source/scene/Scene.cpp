@@ -35,7 +35,7 @@ namespace GAMEDEV_ENGINE
         auto gameObject = new GameObject(); // create a new GameObject
         _mRootGameObjects.emplace_back(gameObject); // store it in the root game objects
         gameObject->SetName(name);
-       SetParent(gameObject, parent);
+        SetParent(gameObject, parent);
         return gameObject;
 
         // auto gameObject = std::make_unique<GameObject>();

@@ -3,6 +3,7 @@
 #include "Engine/source/render/RenderQueue.h"
 #include "Engine/source/render/material.h"
 #include "Engine/source/render/mesh.h"
+#include "Engine/source/graphics/ShaderProgram.h"
 namespace GAMEDEV_ENGINE
 {
     void RenderQueue::Submit(const RenderCommand& command)
@@ -17,6 +18,8 @@ namespace GAMEDEV_ENGINE
         for (auto& command : _mCommands)
         {
             graphicsAPI.BindMaterial(command.material);
+            // here we get the Shader progarm from the material and Set the model matrix uniform
+            command.material->GetShaderProgram()->SetUniformMat4f("uModel", command.modelMatrix);
             graphicsAPI.BindMesh(command.mesh);
             graphicsAPI.DrawMesh(command.mesh);
 
