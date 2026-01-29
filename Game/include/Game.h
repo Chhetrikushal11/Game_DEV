@@ -17,7 +17,7 @@ namespace GAMEDEV_ENGINE
         void Update(float deltaTime) override;
         void Destroy() override;
     private:
-        Scene _mScene;
+        Scene* _mScene = nullptr;
  
     }; 
 }

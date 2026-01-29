@@ -1,6 +1,7 @@
 #include "Engine/Engine.h"
 #include "Engine/Application.h"
 #include "Engine/scene/GameObject.h"
+#include "Engine/scene/Component/CameraComponent.h"
 
 namespace GAMEDEV_ENGINE 
 {
@@ -141,30 +142,33 @@ void Engine::Run()
         _mLastFrameTime = currentFrameTime;
         
         // ✅ 1. CLEAR FIRST (at the beginning)
-        _sGraphicsAPI->SetClearColor(0.1f, 0.1f, 0.2f, 1.0f);
+        _sGraphicsAPI->SetClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         _sGraphicsAPI->ClearBuffers();
         
         // ✅ 2. UPDATE (submits render commands)
         _mApplication->Update(deltaTime.count());
-//         
-//         // we retrive current scene and update it
-//         CameraData cameraData;
-//         if (_mCurrentEngineScene)
-//         {
-//             if (auto cameraGameObject = _mCurrentEngineScene->GetMainCameraGameObject())
-//             {
-//                 if (auto cameraComponent = cameraGameObject->GetComponent<CameraComponent>())
-//                 {
-//                     cameraData.viewMatrix = cameraComponent->GetViewMatrix();
-//                     cameraData.projectionMatrix = cameraComponent->GetProjectionMatrix();
-//                 }
-//             }
-//             /* code */
-//         }
-//         
-//         
-        // TODO: Add camera support later
-        CameraData cameraData;
+         
+         // we retrive current scene and update it
+         CameraData cameraData;
+         int width= 0;
+         int height = 0;
+         glfwGetWindowSize(_gWindow, &width, &height);
+         float aspect = static_cast<float>(width) / static_cast<float>(height);
+         if (_mCurrentEngineScene)
+         {
+             if (auto cameraGameObject = _mCurrentEngineScene->GetMainCameraGameObject())
+             {
+                 if (auto cameraComponent = cameraGameObject->GetComponent<CameraComponent>())
+                 {
+                     cameraData.viewMatrix = cameraComponent->GetViewMatrix();
+                     cameraData.projectionMatrix = cameraComponent->GetProjectionMatrix(aspect);
+                 }
+             }
+             /* code */
+         }
+         
+         
+
         cameraData.viewMatrix = glm::mat4(1.0f);
         cameraData.projectionMatrix = glm::mat4(1.0f);
 
