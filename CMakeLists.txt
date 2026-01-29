@@ -17,31 +17,51 @@ endif()
 # Find OpenGL
 find_package(OpenGL REQUIRED)
 
-# Find GLFW3
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GLFW REQUIRED glfw3)
+# Find GLFW3 (cross-platform)
+find_package(glfw3 QUIET CONFIG)
+if(NOT glfw3_FOUND)
+    # Linux fallback using pkg-config
+    if(UNIX AND NOT APPLE)
+        find_package(PkgConfig REQUIRED)
+        pkg_check_modules(GLFW REQUIRED glfw3)
+    else()
+        message(FATAL_ERROR "GLFW3 not found. Please install via vcpkg on Windows or brew on macOS")
+    endif()
+endif()
 
-# Find GLM - simple approach
-find_path(GLM_INCLUDE_DIR glm/glm.hpp PATHS /usr/include /usr/local/include)
-if(GLM_INCLUDE_DIR)
-    add_library(glm INTERFACE)
-    target_include_directories(glm INTERFACE ${GLM_INCLUDE_DIR})
-    add_library(glm::glm ALIAS glm)
-    message(STATUS "Found GLM at: ${GLM_INCLUDE_DIR}")
-else()
-    message(FATAL_ERROR "GLM not found")
+# Find GLM (cross-platform)
+find_package(glm QUIET CONFIG)
+if(NOT glm_FOUND)
+    # Fallback: find headers directly
+    find_path(GLM_INCLUDE_DIR glm/glm.hpp
+        PATHS /usr/include /usr/local/include
+    )
+    if(GLM_INCLUDE_DIR)
+        add_library(glm INTERFACE)
+        target_include_directories(glm INTERFACE ${GLM_INCLUDE_DIR})
+        add_library(glm::glm ALIAS glm)
+        message(STATUS "Found GLM at: ${GLM_INCLUDE_DIR}")
+    else()
+        message(FATAL_ERROR "GLM not found")
+    endif()
+endif()
+
+# Find or build GLEW
+find_package(GLEW QUIET CONFIG)
+if(NOT GLEW_FOUND)
+    # Build GLEW from source
+    message(STATUS "Building GLEW from source")
+    file(GLOB GLEW_SOURCES external/glew/src/glew.c)
+    add_library(GLEW STATIC ${GLEW_SOURCES})
+    target_include_directories(GLEW PUBLIC external/glew/include)
+    target_compile_definitions(GLEW PUBLIC GLEW_STATIC)
+    target_link_libraries(GLEW PUBLIC OpenGL::GL)
+    add_library(GLEW::GLEW ALIAS GLEW)
 endif()
 
 # Build GLAD from source
 add_library(glad STATIC external/glad/src/glad.c)
 target_include_directories(glad PUBLIC external/glad/include)
-
-# Build GLEW from source
-file(GLOB GLEW_SOURCES external/glew/src/glew.c)
-add_library(GLEW STATIC ${GLEW_SOURCES})
-target_include_directories(GLEW PUBLIC external/glew/include)
-target_compile_definitions(GLEW PUBLIC GLEW_STATIC)
-target_link_libraries(GLEW PUBLIC OpenGL::GL)
 
 # Add STB
 add_library(stb INTERFACE)
