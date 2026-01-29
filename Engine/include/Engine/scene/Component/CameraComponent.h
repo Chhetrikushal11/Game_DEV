@@ -4,14 +4,17 @@
 
 namespace GAMEDEV_ENGINE
 {
+
     class CameraComponent : public Component
     {
         public:
          
-
+            COMPONENT(CameraComponent)
             void Update(float deltaTime) override;
             glm::mat4 GetViewMatrix() const;
             glm::mat4 GetProjectionMatrix(float aspect) const;
+            
+
 
         private:
             // Camera properties can be added here

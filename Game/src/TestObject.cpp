@@ -132,6 +132,11 @@ void TestObject::Update(float deltaTime)
         {
            position.y -= 0.01f; // to move downward
         }
+
+        if (inputManager.IskeyPressed(GLFW_KEY_H))
+        {
+            position = glm::vec3(0.0f, 0.0f, 0.0f);  // Reset to origin
+        }
         
         SetPosition(position);
         _mTime += deltaTime; // to accumulate time

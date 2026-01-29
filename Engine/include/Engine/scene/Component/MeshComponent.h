@@ -10,6 +10,7 @@ namespace GAMEDEV_ENGINE
     class MeshComponent : public Component
     {
     public:
+        COMPONENT(MeshComponent)
         // constructor will accept shared pointer of material and mesh
         MeshComponent(std::shared_ptr<Material> material, std::shared_ptr<Mesh> mesh);
         

@@ -46,15 +46,19 @@ namespace GAMEDEV_ENGINE
         // Adding the component management methods
         void AddComponent(Component* component);
         
-        // ✅ NEW: Get component by type
-        template<typename T>
+        // ✅ OPTIMIZED: GetComponent using TypeID (O(n) but faster than dynamic_cast)
+        template<typename T, typename = std::enable_if_t<std::is_base_of_v<Component, T>>>
         T* GetComponent()
         {
+            // Get the unique type ID for component type T
+            size_t typeId = Component::StaticTypeId<T>();
+
+            // Search through components
             for (auto& component : _mComponents)
             {
-                if (T* derived = dynamic_cast<T*>(component.get()))
+                if (component->GetTypeId() == typeId)
                 {
-                    return derived;
+                    return static_cast<T*>(component.get());  // Safe: we know the type matches
                 }
             }
             return nullptr;
@@ -79,4 +83,7 @@ namespace GAMEDEV_ENGINE
         // declaring scene as friend class to access private members
         friend class Scene;
     };
+
+
+
 } // namespace GAMEDEV_ENGINE

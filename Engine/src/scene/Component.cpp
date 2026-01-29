@@ -2,8 +2,7 @@
 
 namespace GAMEDEV_ENGINE
 {
-    void Component::Update(float deltaTime)
-    {
-        // default implementation (can be overridden by derived classes)
-    }
+    // Initialize static type ID counter
+    size_t Component::_sNextTypeID = 1;
+
 }
