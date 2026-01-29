@@ -1,0 +1,32 @@
+# Collect all game source files
+file(GLOB_RECURSE GAME_SOURCES 
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
+)
+
+# Create the Game executable
+add_executable(Game ${GAME_SOURCES})
+
+# Include directories
+target_include_directories(Game 
+    PRIVATE 
+        ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+# Link against Engine
+target_link_libraries(Game
+    PRIVATE
+        Engine
+)
+
+# Set output directory
+set_target_properties(Game PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+)
+
+# Windows-specific: Copy DLLs to output directory if needed
+if(WIN32)
+    # This ensures the executable can find DLLs
+    set_target_properties(Game PROPERTIES
+        VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+    )
+endif()
