@@ -26,11 +26,8 @@ namespace GAMEDEV_ENGINE
 
     glm::mat4 CameraComponent::GetViewMatrix() const
     {
-        if (GetOwner())
-        {
-           return  glm::inverse(_mGameObjectOwner->GetWorldTransformMatrix());
-        }
-        
+         return  glm::inverse(_mGameObjectOwner->GetWorldTransformMatrix());
+  
     }
 
     glm::mat4 CameraComponent::GetProjectionMatrix(float aspect) const

@@ -174,20 +174,18 @@ void Engine::Run()
          {
              if (auto cameraGameObject = _mCurrentEngineScene->GetMainCameraGameObject())
              {
-                 if (auto cameraComponent = cameraGameObject->GetComponent<CameraComponent>())
+                 auto cameraComponent = cameraGameObject->GetComponent<CameraComponent>();
+                 if (cameraComponent)
                  {
                      cameraData.viewMatrix = cameraComponent->GetViewMatrix();
                      cameraData.projectionMatrix = cameraComponent->GetProjectionMatrix(aspect);
 
                  }
              }
-             /* code */
+       
          }
          
          
-
-        cameraData.viewMatrix = glm::mat4(1.0f);
-        cameraData.projectionMatrix = glm::mat4(1.0f);
 
         // ✅ 3. DRAW (renders submitted commands)
         _mRenderQueue.Draw(*_sGraphicsAPI, cameraData);
