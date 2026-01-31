@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <glm/vec2.hpp>
 #include <iostream>
 #include <chrono>
 #include <array>
@@ -25,8 +26,25 @@ namespace GAMEDEV_ENGINE
         bool IskeyPressed(int key) const;
 
 
+        // to get the Method to get information of mouse activity
+        void SetMouseButtonPressed(int button, bool pressed);
+
+        bool IsMouseButtonPressed(int button) const;
+
+        void SetMousePositionOld(const glm::vec2& pos);
+        const glm::vec2& GetMousePositionOld() const { return _mMousePositionOld; }
+
+        void SetMousePositionNew(const glm::vec2& pos);
+        const glm::vec2& GetMousePositionCurrent() const {return _mMousePositionNew;}
     private:
         std::array<bool, 256> _mKeys = { false }; // assuming 256 keys
+        // an extra array to hold the states of mouse speciifically
+        std::array<bool, 16>_mMouseKeys = { false };
+        // now we need two variables to hold current and previous frame position value
+        glm::vec2 _mMousePositionOld = glm::vec2(0.0f);
+        glm::vec2 _mMousePositionNew = glm::vec2(0.0f);
+        /*glm::vec2 _mMousePositionNew = glm::vec2(0.0f);*/
+
         friend class Engine; // only Engine class can create and destroy InputManager
       
     };

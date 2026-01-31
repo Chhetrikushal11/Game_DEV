@@ -107,38 +107,34 @@ void TestObject::Update(float deltaTime)
 {
     GAMEDEV_ENGINE::GameObject::Update(deltaTime);
     // std::cout <<"Current deltaTime: "<< deltaTime << std::endl;
+#if 0
     // first we get the position
-        auto position = GetPosition();
-        // updating offset based on position
+    auto position = GetPosition();
+    // updating offset based on position
+    auto& inputManager = GAMEDEV_ENGINE::Engine::GetInstance().GetInputManager();
+    if (inputManager.IskeyPressed(GLFW_KEY_A))
+    {
+        position.x -= 0.01f; // to move left
+    }
+    if (inputManager.IskeyPressed(GLFW_KEY_D))
+    {
+        position.x += 0.01f; // to move right
+    }
+    if (inputManager.IskeyPressed(GLFW_KEY_W))
+    {
+        position.y += 0.01f; // to move upward
+    }
+    if (inputManager.IskeyPressed(GLFW_KEY_S))
+    {
+        position.y -= 0.01f; // to move downward
+    }
+    if (inputManager.IskeyPressed(GLFW_KEY_H))
+    {
+        position = glm::vec3(0.0f, 0.0f, 0.0f);  // Reset to origin
+    }
 
-
-       auto& inputManager = GAMEDEV_ENGINE::Engine::GetInstance().GetInputManager();
-       if(inputManager.IskeyPressed(GLFW_KEY_A))
-       {
-           position.x -= 0.01f; // to move left
-       } 
-
-        if(inputManager.IskeyPressed(GLFW_KEY_D))
-        {
-           position.x += 0.01f; // to move right
-        }
-
-        if(inputManager.IskeyPressed(GLFW_KEY_W))
-       {
-           position.y += 0.01f; // to move upward
-       } 
-
-        if(inputManager.IskeyPressed(GLFW_KEY_S))
-        {
-           position.y -= 0.01f; // to move downward
-        }
-
-        if (inputManager.IskeyPressed(GLFW_KEY_H))
-        {
-            position = glm::vec3(0.0f, 0.0f, 0.0f);  // Reset to origin
-        }
-        
-        SetPosition(position);
+    SetPosition(position);
+#endif
         _mTime += deltaTime; // to accumulate time
 
 

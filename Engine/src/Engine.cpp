@@ -110,7 +110,23 @@ bool Engine::Init(int width, int height, const char* title)
         Engine::GetInstance().keyCallback(window, key, scancode, action, mods);
     });
 
+    glfwSetMouseButtonCallback(_gWindow, [](GLFWwindow* window, int button, int action, int  )
+        {
+            Engine::GetInstance().mouseButtonCallback(window, button, action, 0);
+        });
+
+    
+
+    glfwSetCursorPosCallback(_gWindow, [](GLFWwindow* window, double xPos, double yPos)
+        {
+            Engine::GetInstance().mouseCursorCallback(window, xPos, yPos);
+        });
+
     return _mApplication->Init();
+
+  
+
+
 }
 
     // ============================================
@@ -178,6 +194,9 @@ void Engine::Run()
         
         // ✅ 4. SWAP BUFFERS (show result)
         glfwSwapBuffers(_gWindow);
+
+        // we need to update the OldPosition with current mouse position current
+        _mInputManager.SetMousePositionOld(_mInputManager.GetMousePositionCurrent());
     }
     
     std::cout << "Game loop ended" << std::endl;
@@ -242,6 +261,33 @@ void Engine::Run()
         }
     }
 
+    // ============================================
+    // MouseKeyCallback
+   // ============================================
+    void Engine::mouseButtonCallback(GLFWwindow* window, int button, int action, int )
+    {
+        if (action == GLFW_PRESS)
+        {
+            _mInputManager.SetMouseButtonPressed(button, true);
+        }
+        else if (action == GLFW_RELEASE)
+        {
+            _mInputManager.SetMouseButtonPressed(button, true);
+        }
+    }
+
+    // =================================================
+    // MouseCursorPosition
+    // =================================================
+
+    void Engine::mouseCursorCallback(GLFWwindow* window, double xPos, double yPos)
+    {
+        _mInputManager.SetMousePositionOld(_mInputManager.GetMousePositionCurrent());
+    }
+
+    // =================================================
+    // MouseCursorPosition
+    // =================================================
     void Engine::SetCurrentScene(Scene* scene)
     {
         if(scene)

@@ -4,6 +4,7 @@
 #include "Engine/graphics/GraphicsAPI.h"
 #include "Engine/render/RenderQueue.h"
 #include "Engine/scene/Component/CameraComponent.h"
+#include "Engine/scene/Component/PlayerControllerComponent.h"
 #include "TestObject.h"
 
  namespace GAMEDEV_ENGINE 
@@ -15,6 +16,7 @@ bool Game::Init()
     auto camera = _mScene->CreateGameObject("Camera");
     camera->AddComponent(new CameraComponent());
     camera->SetPosition(glm::vec3(0.0f, 0.0f, 2.0f));
+    camera->AddComponent(new PlayerControllerComponent());
     // need to set main camera for the secene
     _mScene->SetMainCameraGameObject(camera);
     // if(!shaderProgram)  // If shader creation FAILED (nullptr)
