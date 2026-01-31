@@ -40,7 +40,7 @@ namespace GAMEDEV_ENGINE
         InputManager& GetInputManager();
         void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
         // for mouseButtonCallBack
-        void mouseButtonCallback(GLFWwindow* window, int button, int action, int);
+        void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
         // for mouseCursor CallBack
         void mouseCursorCallback(GLFWwindow* window, double xPos, double yPos);
         static GraphicsAPI& GetGraphicsAPI();  // ✅ Returns reference

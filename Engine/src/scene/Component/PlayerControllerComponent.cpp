@@ -32,9 +32,10 @@ namespace GAMEDEV_ENGINE
 
         // ✅ Build rotation matrix (accumulate rotations, don't redeclare)
         glm::mat4 rotMat(1.0f);
-        rotMat = glm::rotate(rotMat, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f)); // Yaw (Y)
-        rotMat = glm::rotate(rotMat, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f)); // Pitch (X)
-        rotMat = glm::rotate(rotMat, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f)); // Roll (Z)
+        // Your current code is CORRECT if rotation is in degrees
+        rotMat = glm::rotate(rotMat, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+        rotMat = glm::rotate(rotMat, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+        rotMat = glm::rotate(rotMat, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
         // ✅ Calculate forward and right vectors
         glm::vec3 front = glm::normalize(glm::vec3(rotMat * glm::vec4(0.0f, 0.0f, -1.0f, 0.0f))); // Forward is -Z
@@ -45,20 +46,22 @@ namespace GAMEDEV_ENGINE
         // ✅ Movement (use vec3 operations, not component assignment)
         if (inputManager.IskeyPressed(GLFW_KEY_A))
         {
-            position -= right * _mMoveSpeed * deltaTime;  // Move left
+            position -= right * _mMoveSpeed * deltaTime;
         }
-        if (inputManager.IskeyPressed(GLFW_KEY_D))
+        else if (inputManager.IskeyPressed(GLFW_KEY_D))  // Uses else-if
         {
-            position += right * _mMoveSpeed * deltaTime;  // Move right
-        }
+            position += right * _mMoveSpeed * deltaTime;
+        }  
+        
         if (inputManager.IskeyPressed(GLFW_KEY_W))
         {
             position += front * _mMoveSpeed * deltaTime;  // Move forward
         }
-        if (inputManager.IskeyPressed(GLFW_KEY_S))
+        else if (inputManager.IskeyPressed(GLFW_KEY_S))
         {
             position -= front * _mMoveSpeed * deltaTime;  // Move backward
         }
+
         if (inputManager.IskeyPressed(GLFW_KEY_H))
         {
             position = glm::vec3(0.0f, 0.0f, 0.0f);  // Reset to origin

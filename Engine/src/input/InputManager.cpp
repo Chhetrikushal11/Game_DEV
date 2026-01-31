@@ -44,9 +44,9 @@ namespace GAMEDEV_ENGINE
         return _mMouseKeys[button];
     }
 
-    void InputManager::SetMousePositionNew(const glm::vec2& pos)
+    void InputManager::SetMousePositionCurrent(const glm::vec2& pos)
     {
-        _mMousePositionNew = pos;
+        _mMousePositionCurrent = pos;
     }
 
     void InputManager::SetMousePositionOld(const glm::vec2& pos)
