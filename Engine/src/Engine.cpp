@@ -122,6 +122,7 @@ bool Engine::Init(int width, int height, const char* title)
             Engine::GetInstance().mouseCursorCallback(window, xPos, yPos);
         });
 
+    _sGraphicsAPI->Init();
     return _mApplication->Init();
 
   

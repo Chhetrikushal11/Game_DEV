@@ -60,16 +60,49 @@ TestObject::TestObject()
     // rectangle with two triangles with positions and color per vertex
     std::vector<float> vertices = {
         // positions & colors
-         0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f,   // top right with red color
-         0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom right with green color
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,   // bottom left with blue color
-        -0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 0.0f  // top left with yellow color
+        
+        // front face
+         0.5f,  0.5f, 0.5f, 1.0f, 0.0f, 0.0f,   // top right with red color
+         0.5f, -0.5f, 0.5f,  0.0f, 1.0f, 0.0f,  // bottom right with green color
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,   // bottom left with blue color
+        -0.5f,  0.5f, 0.5f, 1.0f, 1.0f, 0.0f,  // top left with yellow color
+
+        //back face
+         0.5f,  0.5f, -0.5f, 1.0f, 0.0f, 0.0f,   // top right with red color
+         0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  // bottom right with green color
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 1.0f,   // bottom left with blue color
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 0.0f  // top left with yellow color
     };
 
     // now for indices
     std::vector<unsigned int> indices = {
-        0, 1, 2, // first triangle
-        0, 2, 3
+        //front face
+        0, 1, 2, 
+        0, 2, 3,
+
+        // top face
+        4, 5, 1,
+        4, 1, 0,
+
+        // right side face
+        4, 0, 3,
+        4, 3, 7,
+
+        // left side face
+
+        1, 5,  6,
+        1, 6, 2,
+
+        // back face
+        4, 7, 6,
+        4, 6, 5,
+
+        // bottom face
+        3, 2, 6,
+        3, 6, 7
+
+
+
     };
 
     // now creating vertex layout object and define the layout structure

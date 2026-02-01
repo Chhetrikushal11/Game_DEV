@@ -11,6 +11,13 @@
 #include "Engine/render/mesh.h"
 namespace GAMEDEV_ENGINE
 {
+    // bool init 
+    bool GraphicsAPI::Init()
+    {
+        // we will call the GL_DEPTH_BUFFER ENABLE
+        glEnable(GL_DEPTH_TEST);
+        return true;
+    }
     // this method will get the vertex and fragment shader source code as strings, compile shaders and link them to crate a shader program, Return shader program instance
     std::shared_ptr<ShaderProgram> GraphicsAPI::CreateShaderProgram(const std::string& vertexShaderSource, const std::string& fragmentShaderSource)
     {
@@ -149,7 +156,7 @@ namespace GAMEDEV_ENGINE
 
     void GraphicsAPI::ClearBuffers()
     {
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
 }

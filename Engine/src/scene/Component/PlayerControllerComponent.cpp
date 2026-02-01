@@ -22,24 +22,34 @@ namespace GAMEDEV_ENGINE
             float deltaX = current.x - oldPos.x; 
             float deltaY = current.y - oldPos.y;
 
-            // Rotation around Y axis (yaw)
-            rotation.y -= deltaX * _mSensitivity * deltaTime;
+            // Rotation around Y axis (yaw) ===============================
+          //  rotation.y -= deltaX * _mSensitivity/* * deltaTime*/;
             // Rotation around X axis (pitch)
-            rotation.x -= deltaY * _mSensitivity * deltaTime;
+           // rotation.x -= deltaY * _mSensitivity /** deltaTime*/;
+           // for global y
+            float yAngle = -deltaX * _mSensitivity * deltaTime;
+            // converting it to quaterion
+            glm::quat yRot = glm::angleAxis(yAngle, glm::vec3(0.0f, 1.0f, 0.0f));
 
+            // vertical rotation around local x -axis
+            float xAngle = -deltaX * _mSensitivity * deltaTime;
+            glm::vec3 right = rotation * glm::vec3(1.0f, 0.0f, 0.0f); // first we need to get the right vector
+            glm::quat xRot = glm::angleAxis(xAngle, right);
+            
+           // to combine we multiply the xRot with yRot
+            glm::quat deltaRot = yRot * xRot;
+
+            rotation = glm::normalize(deltaRot * rotation);
+
+
+            // ===========================================================
             _mGameObjectOwner->SetRotation(rotation);
         }
 
-        // ✅ Build rotation matrix (accumulate rotations, don't redeclare)
-        glm::mat4 rotMat(1.0f);
-        // Your current code is CORRECT if rotation is in degrees
-        rotMat = glm::rotate(rotMat, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-        rotMat = glm::rotate(rotMat, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-        rotMat = glm::rotate(rotMat, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
         // ✅ Calculate forward and right vectors
-        glm::vec3 front = glm::normalize(glm::vec3(rotMat * glm::vec4(0.0f, 0.0f, -1.0f, 0.0f))); // Forward is -Z
-        glm::vec3 right = glm::normalize(glm::vec3(rotMat * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f)));  // Right is +X
+        glm::vec3 front = rotation * glm::vec3(0.0f, 0.0f, -1.0f);
+        glm::vec3 right = rotation * glm::vec3(1.0f, 0.0f, 0.0f);  // Right is +X
 
         auto position = _mGameObjectOwner->GetPosition();
 

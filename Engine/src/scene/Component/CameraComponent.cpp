@@ -26,7 +26,23 @@ namespace GAMEDEV_ENGINE
 
     glm::mat4 CameraComponent::GetViewMatrix() const
     {
-         return  glm::inverse(_mGameObjectOwner->GetWorldTransformMatrix());
+        glm::mat4 mat = glm::mat4(1.0f);
+        //first apply the rotation
+        mat = glm::mat4_cast(_mGameObjectOwner->GetRotation());
+        // now translation
+       
+        // instead of translating after rotation it just  push directly the matrix the translation into the matrix directly
+        mat[3] = glm::vec4(_mGameObjectOwner->GetPosition(), 1.0f);
+
+        // incase camera have the parents
+        if (_mGameObjectOwner->GetParent())
+        {
+            // we multiply to parent world transform
+            mat = _mGameObjectOwner->GetParent()->GetWorldTransformMatrix() * mat;
+        }
+        // then we inverse the mat
+
+         return  glm::inverse(mat);
   
     }
 

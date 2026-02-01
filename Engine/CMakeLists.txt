@@ -1,20 +1,21 @@
-# Collect all engine source files
+﻿# Collect all source files
 file(GLOB_RECURSE ENGINE_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 
-# Create Engine library
-add_library(Engine STATIC ${ENGINE_SOURCES})
+# ✅ ADD: Collect all header files
+file(GLOB_RECURSE ENGINE_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
+
+# Create Engine library with BOTH sources and headers
+add_library(Engine STATIC ${ENGINE_SOURCES} ${ENGINE_HEADERS})
 
 # Include directories
 target_include_directories(Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Link libraries - handle both GLFW find methods
 if(TARGET glfw)
-    # Modern CMake target (Windows/macOS via vcpkg/brew)
     target_link_libraries(Engine PUBLIC glfw)
 elseif(TARGET glfw3)
     target_link_libraries(Engine PUBLIC glfw3)
 else()
-    # pkg-config fallback (Linux)
     target_include_directories(Engine PUBLIC ${GLFW_INCLUDE_DIRS})
     target_link_libraries(Engine PUBLIC ${GLFW_LIBRARIES})
 endif()
@@ -46,3 +47,7 @@ if(APPLE)
         ${COREVIDEO_LIBRARY}
     )
 endif()
+
+# ✅ ADD: Organize headers in Visual Studio filters
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" PREFIX "Header Files" FILES ${ENGINE_HEADERS})
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" PREFIX "Source Files" FILES ${ENGINE_SOURCES})

@@ -69,11 +69,17 @@ namespace GAMEDEV_ENGINE
         glm::mat4 translationMatrix = glm::translate(identityMatrix, _mPosition);
 
         // step 3: Rotation second (applying in ZYX order)
-        glm::mat4 rotationXMatrix = glm::rotate(identityMatrix, glm::radians(_mRotation.x), glm::vec3(1.0f, 0.0f, 0.0f)); // rotate around X axis
-        glm::mat4 rotationYMatrix = glm::rotate(identityMatrix, glm::radians(_mRotation.y), glm::vec3(0.0f, 1.0f, 0.0f)); // rotate around X axis
-        glm::mat4 rotationZMatrix = glm::rotate(identityMatrix, glm::radians(_mRotation.z), glm::vec3(0.0f, 0.0f, 1.0f)); // rotate around X axis
+        
+            // --- using quaternion --
+        glm::mat4 rotationMatrix = glm::mat4_cast(_mRotation); // here glm::mat4_cast simply convert quat to mat4 for rotation
+
+        //glm::mat4 rotationXMatrix = glm::rotate(identityMatrix, _mRotation.x, glm::vec3(1.0f, 0.0f, 0.0f)); // rotate around X axis
+        //glm::mat4 rotationYMatrix = glm::rotate(identityMatrix, _mRotation.y, glm::vec3(0.0f, 1.0f, 0.0f)); // rotate around X axis
+        //glm::mat4 rotationZMatrix = glm::rotate(identityMatrix, _mRotation.z, glm::vec3(0.0f, 0.0f, 1.0f)); // rotate around X axis
         // combine rotations
-        glm::mat4 rotationMatrix = rotationZMatrix * rotationYMatrix * rotationXMatrix;
+       /* glm::mat4 rotationMatrix = rotationZMatrix * rotationYMatrix * rotationXMatrix;*/
+
+
 
         // step 4: Scaling last
         glm::mat4 scaleMatrix = glm::scale(identityMatrix, _mScale);

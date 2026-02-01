@@ -30,6 +30,8 @@ namespace GAMEDEV_ENGINE
         GraphicsAPI& operator=(GraphicsAPI&&) = delete; // we dont want move assignment operator
         ~GraphicsAPI() = default;
     public:
+     // to check the depth buffer
+        bool Init();
     // add the method to set the graphics API
     std::shared_ptr<ShaderProgram> CreateShaderProgram(const std::string& vertexShaderSource, const std::string& fragmentShaderSource); 
 
