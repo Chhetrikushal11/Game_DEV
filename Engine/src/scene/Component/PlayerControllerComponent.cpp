@@ -32,7 +32,7 @@ namespace GAMEDEV_ENGINE
             glm::quat yRot = glm::angleAxis(yAngle, glm::vec3(0.0f, 1.0f, 0.0f));
 
             // vertical rotation around local x -axis
-            float xAngle = -deltaX * _mSensitivity * deltaTime;
+            float xAngle = -deltaY * _mSensitivity * deltaTime;
             glm::vec3 right = rotation * glm::vec3(1.0f, 0.0f, 0.0f); // first we need to get the right vector
             glm::quat xRot = glm::angleAxis(xAngle, right);
             
