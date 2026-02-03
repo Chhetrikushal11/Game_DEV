@@ -1,5 +1,5 @@
 #pragma once
-
+#include <cstddef> // for size_t
 namespace GAMEDEV_ENGINE
 {
     class GameObject; // Forward declaration
