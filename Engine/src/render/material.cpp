@@ -1,5 +1,6 @@
 #include "Engine/render/material.h"
 #include "Engine/graphics/ShaderProgram.h"
+#include "Engine/graphics/Texture.h"
 
 namespace GAMEDEV_ENGINE
 {
@@ -17,6 +18,11 @@ namespace GAMEDEV_ENGINE
     void Material::SetFloatParams2f(const std::string& name, float v0, float v1)
     {
         _mFloat2Params[name] = {v0, v1};
+    }
+
+    void GAMEDEV_ENGINE::Material::SetTextureParams(const std::string& name, const std::shared_ptr<Texture>& texture)
+    {
+        _mTextureContainers[name] = texture;
     }
 
     void Material::Bind() const
@@ -41,7 +47,14 @@ namespace GAMEDEV_ENGINE
           {
             _mShaderProgram->SetUniform2f(param.first, param.second.first, param.second.second);
           }
+
+          for (const auto& param : _mTextureContainers)
+          {
+              _mShaderProgram->SetTexture(param.first, param.second.get());
+          }
             
         }
     }
+
+
 }

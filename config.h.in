@@ -1,0 +1,9 @@
+#pragma once
+
+// Asset directory (replaced at build time)
+#define ASSETS_ROOT "@ASSETS_DIR@"
+
+// Project information
+#define ENGINE_VERSION_MAJOR @GameDevelopmentProject_VERSION_MAJOR@
+#define ENGINE_VERSION_MINOR @GameDevelopmentProject_VERSION_MINOR@
+#define ENGINE_VERSION_PATCH @GameDevelopmentProject_VERSION_PATCH@

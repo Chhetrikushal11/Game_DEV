@@ -7,7 +7,7 @@
 
 namespace GAMEDEV_ENGINE 
 {
-
+    class Texture; // forward declaration
     class ShaderProgram
     {
         public:
@@ -25,7 +25,7 @@ namespace GAMEDEV_ENGINE
            ~ShaderProgram();
 
         // to use bind method so we can bind openGL shader program before use
-            void Bind() const;
+            void Bind();
         // to use unbind method so we can unbind openGL shader program after use
             void Unbind() const;
         // need get uniform location method
@@ -39,10 +39,15 @@ namespace GAMEDEV_ENGINE
 
         // to use matrix 4x4 for seting uniform
         void SetUniformMat4f(const std::string& name, const glm::mat4& mat);
+
+        // now to use the texture
+        void SetTexture(const std::string& name, Texture* texture);
         private:
             GLuint _mShaderProgramID = 0; // for storing the shader program ID
             // need to create an array to store the uniform locations for local caching to avoid multiple glGetUniformLocation calls
             mutable std::unordered_map<std::string, GLint> _mUniformLocationCache;
+
+            int _mCurrentTextureunit = 0;
 
     };  
 }

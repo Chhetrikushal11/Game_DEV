@@ -8,6 +8,7 @@
 #include "Engine/graphics/GraphicsAPI.h"
 #include "Engine/render/RenderQueue.h"
 #include "Engine/scene/Scene.h"
+#include "Engine/io/AssetFileSystem.h"
 
 namespace GAMEDEV_ENGINE 
 {
@@ -51,6 +52,8 @@ namespace GAMEDEV_ENGINE
         Scene* GetCurrentScene() const { return _mCurrentEngineScene.get(); }
         void SetCurrentScene(Scene* scene);
 
+        // adding Getter method for the file system
+        AssetFileSystem& GetAssetFileSystem() { return _mAssetFileSystem; }
         private:
         Application* _mApplication;
         std::chrono::high_resolution_clock::time_point _mLastFrameTime;
@@ -59,5 +62,8 @@ namespace GAMEDEV_ENGINE
         RenderQueue _mRenderQueue;
         // now we need to add scene pointer
         std::unique_ptr<Scene> _mCurrentEngineScene;
+        // need to add FileSystem
+        AssetFileSystem  _mAssetFileSystem;
+
     };
 }

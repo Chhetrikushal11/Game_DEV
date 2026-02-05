@@ -26,6 +26,7 @@ target_link_libraries(Engine
         OpenGL::GL
         GLEW::GLEW
         glm::glm
+        stb
 )
 
 # Windows-specific settings
@@ -51,3 +52,20 @@ endif()
 # ✅ ADD: Organize headers in Visual Studio filters
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" PREFIX "Header Files" FILES ${ENGINE_HEADERS})
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" PREFIX "Source Files" FILES ${ENGINE_SOURCES})
+
+# ✅ Generate config.h from template
+configure_file(
+    ${CMAKE_SOURCE_DIR}/config.h.in     
+    ${PROJECT_BINARY_DIR}/config.h
+)
+
+# ✅ Include build directory (so config.h can be found)
+target_include_directories(Engine PRIVATE ${PROJECT_BINARY_DIR})
+
+# ✅ Copy assets to build folder after building
+add_custom_command(TARGET Engine POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${ASSETS_DIR}
+    ${CMAKE_BINARY_DIR}/assets
+    COMMENT "Copying assets to build directory..."
+)

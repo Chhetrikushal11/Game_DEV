@@ -1,6 +1,8 @@
 #include <iostream>
-#include <glm/gtc/type_ptr.hpp> // for glm::value_ptr    
+#include <glm/gtc/type_ptr.hpp> // for glm::value_ptr   
+
 #include "Engine/graphics/ShaderProgram.h"
+#include "Engine/graphics/Texture.h"
 
 namespace GAMEDEV_ENGINE 
 {
@@ -16,10 +18,12 @@ namespace GAMEDEV_ENGINE
         // destructor to delete the shader program
         // this happen inside OpenGL context
     }   
-    void ShaderProgram::Bind() const
+    void ShaderProgram::Bind()
     {
         glUseProgram(_mShaderProgramID);
         // this is used to tell openGL to use this shader program for rendering
+        // set the counter to zero
+        _mCurrentTextureunit = 0;
     }
 
     void ShaderProgram::Unbind() const
@@ -76,6 +80,18 @@ namespace GAMEDEV_ENGINE
        
     }
 
+
+    void ShaderProgram::SetTexture(const std::string& name, Texture* texture)
+    {
+        auto location = GetUniformLocation(name);
+
+        glActiveTexture(GL_TEXTURE0 + _mCurrentTextureunit);
+        glBindTexture(GL_TEXTURE_2D, texture->GetTextureID());
+        glUniform1i(location, _mCurrentTextureunit);
+        ++_mCurrentTextureunit;
+
+
+    }
     
 
 

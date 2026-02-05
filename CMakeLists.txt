@@ -67,6 +67,8 @@ target_include_directories(glad PUBLIC external/glad/include)
 add_library(stb INTERFACE)
 target_include_directories(stb INTERFACE external/stb)
 
+# Define assets directory (development Path)
+set(ASSETS_DIR "${CMAKE_SOURCE_DIR}/assets")
 # Add project components
 add_subdirectory(Engine)
 add_subdirectory(Game)

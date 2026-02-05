@@ -7,7 +7,8 @@
 namespace GAMEDEV_ENGINE 
 {
     class ShaderProgram; // forward declaration
-    
+    class Texture;
+
     class Material
     {
         public:
@@ -23,6 +24,8 @@ namespace GAMEDEV_ENGINE
         // to set the float with two value
         void SetFloatParams2f(const std::string& name, float v0, float v1);
 
+        // to set the texture
+        void SetTextureParams(const std::string& name,const std::shared_ptr<Texture>& texture);
 
         // now to bind the material 
         void Bind() const;
@@ -35,6 +38,8 @@ namespace GAMEDEV_ENGINE
         std::unordered_map<std::string, float> _mFloatParams;
         // need container which will hold 2 parameter for each key
         std::unordered_map<std::string, std::pair<float, float>> _mFloat2Params;
+        // adding container for texture
+        std::unordered_map<std::string, std::shared_ptr<Texture>> _mTextureContainers;
 
     };
 }
