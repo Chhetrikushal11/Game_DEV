@@ -33,6 +33,8 @@ namespace GAMEDEV_ENGINE
         // here we add get method for ShaderProgram
         ShaderProgram* GetShaderProgram() const {return _mShaderProgram.get();}
 
+        // loading static shared ptr for Material
+        static std::shared_ptr<Material> Load(const std::string& path);
         private :
         std::shared_ptr<ShaderProgram> _mShaderProgram;
         std::unordered_map<std::string, float> _mFloatParams;

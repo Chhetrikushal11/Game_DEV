@@ -7,27 +7,15 @@
 #include "Engine/scene/Component/PlayerControllerComponent.h"
 #include "TestObject.h"
 
-// need to define stb image for its implementation
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+
  namespace GAMEDEV_ENGINE 
  {
 bool Game::Init()
 {   // to access the file system
     auto& afs = Engine::GetInstance().GetAssetFileSystem();
-    auto path = afs.GetAssetsFolder()/"textures/brick.png";
-    int width, height, channels;
+  
+    auto texture= Texture::Load("textures/brick.png");
 
-    unsigned char* data = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
-    std::shared_ptr<Texture> texture;
-    if (data)
-    {
-        texture = std::make_shared<Texture>(width, height, channels, data);
-        std::cout << "Image Loaded: " << width << "x" << height << " channels: " << channels << std::endl;
-        std::cout << "Texture ID: " << texture->GetTextureID() << std::endl;  // Add this!
-        stbi_image_free(data);
-    }
-    else { false; }
     
     // now need to intantiate the _mScene
     _mScene = new Scene();
@@ -54,64 +42,65 @@ bool Game::Init()
     }
 
     std::cout << "TestObject1 created successfully" << std::endl;
-    std::string vertexShader = R"(
-        #version 330 core
-        layout(location = 0) in vec3 aPos;
-        layout(location = 1) in vec3 aColor;
-        layout(location = 2) in vec2 uv;
-        
-        out vec3 vertexColor;
-        out vec2 vUV;
-        
-        uniform mat4 uModel;
-        uniform mat4 uView;
-        uniform mat4 uProjection;
-        
-        void main()
-        {
-            gl_Position = uProjection * uView * uModel * vec4(aPos, 1.0);
-            vertexColor = aColor;
-            vUV = uv;
-        }
-    )";
+    std::string vertexShader = afs.LoadAssetFileText("shaders/vertex.glsl");
+    std::string fragmentShader = afs.LoadAssetFileText("shaders/fragment.glsl");
+    //  std::string vertexShader = R"(
+    // 
+    // 
+    //std::string vertexShader = R"(
+    //    #version 330 core
+    //    layout(location = 0) in vec3 aPos;
+    //    layout(location = 1) in vec3 aColor;
+    //    layout(location = 2) in vec2 uv;
+    //    
+    //    out vec3 vertexColor;
+    //    out vec2 vUV;
+    //    
+    //    uniform mat4 uModel;
+    //    uniform mat4 uView;
+    //    uniform mat4 uProjection;
+    //    
+    //    void main()
+    //    {
+    //        gl_Position = uProjection * uView * uModel * vec4(aPos, 1.0);
+    //        vertexColor = aColor;
+    //        vUV = uv;
+    //    }
+    //)";
 
-    // ✅ UPDATED FRAGMENT SHADER - with sine wave!
-    std::string fragmentShader = R"(
-        #version 330 core
-        in vec3 vertexColor;
-        in vec2 vUV;
-        out vec4 FragColor;
-        
-        uniform float uTime;  // ✅ Time uniform
-        uniform sampler2D brickTexture;
-        
-        void main()
-        {   
-             vec4 texColor = texture(brickTexture, vUV);
-          /*  // Three different frequency sine waves
-  
-             float wave1 = sin(uTime * 1.0) * 0.5 + 0.5;
-            float wave2 = sin(uTime * 2.0) * 0.5 + 0.5;
-            float wave3 = sin(uTime * 3.0) * 0.5 + 0.5;
-            
-            // Method 1: Pulse brightness
-            vec3 pulsedColor;
-            pulsedColor.r = vertexColor.r * wave1;
-            pulsedColor.g = vertexColor.g * wave2;
-            pulsedColor.b = vertexColor.b * wave3; */
-        
-            FragColor = texColor * vec4(vertexColor, 1.0);
-        }
-    )";
-    auto& graphicsAPI = GAMEDEV_ENGINE::Engine::GetInstance().GetGraphicsAPI();
-    auto shaderProgram = graphicsAPI.CreateShaderProgram(vertexShader, fragmentShader);
-
+  //  // ✅ UPDATED FRAGMENT SHADER - with sine wave!
+  //  std::string fragmentShader = R"(
+  //      #version 330 core
+  //      in vec3 vertexColor;
+  //      in vec2 vUV;
+  //      out vec4 FragColor;
+  //      
+  //      uniform float uTime;  // ✅ Time uniform
+  //      uniform sampler2D brickTexture;
+  //      
+  //      void main()
+  //      {   
+  //           vec4 texColor = texture(brickTexture, vUV);
+  //        /*  // Three different frequency sine waves
+  //
+  //           float wave1 = sin(uTime * 1.0) * 0.5 + 0.5;
+  //          float wave2 = sin(uTime * 2.0) * 0.5 + 0.5;
+  //          float wave3 = sin(uTime * 3.0) * 0.5 + 0.5;
+  //          
+  //          // Method 1: Pulse brightness
+  //          vec3 pulsedColor;
+  //          pulsedColor.r = vertexColor.r * wave1;
+  //          pulsedColor.g = vertexColor.g * wave2;
+  //          pulsedColor.b = vertexColor.b * wave3; */
+  //      
+  //          FragColor = texColor * vec4(vertexColor, 1.0);
+  //      }
+  //)";
+   
 
     // after shader program initialization we need to set the shader program to material
     // we create material manually here
-    auto _mMaterial = std::make_shared<GAMEDEV_ENGINE::Material>();
-    _mMaterial->SetShaderProgram(shaderProgram);
-    _mMaterial->SetTextureParams("brickTexture", texture);
+    auto _mMaterial = Material::Load("materials/brick.mat");
     // this way mateiral is ready to be used in rendering
 
     // we using rectangle mesh for testing

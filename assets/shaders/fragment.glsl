@@ -1,0 +1,13 @@
+#version 330 core
+in vec3 vertexColor;
+in vec2 vUV;
+out vec4 FragColor;
+
+uniform float uTime;
+uniform sampler2D brickTexture;
+
+void main()
+{
+    vec4 texColor = texture(brickTexture, vUV);
+    FragColor = texColor;
+}

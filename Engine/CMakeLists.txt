@@ -27,6 +27,7 @@ target_link_libraries(Engine
         GLEW::GLEW
         glm::glm
         stb
+        json
 )
 
 # Windows-specific settings

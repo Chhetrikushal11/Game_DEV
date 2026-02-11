@@ -67,6 +67,10 @@ target_include_directories(glad PUBLIC external/glad/include)
 add_library(stb INTERFACE)
 target_include_directories(stb INTERFACE external/stb)
 
+# Add JSON
+add_library(json INTERFACE)
+target_include_directories(json INTERFACE external/json)
+
 # Define assets directory (development Path)
 set(ASSETS_DIR "${CMAKE_SOURCE_DIR}/assets")
 # Add project components

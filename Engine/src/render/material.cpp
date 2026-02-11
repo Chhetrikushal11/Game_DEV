@@ -1,7 +1,10 @@
 #include "Engine/render/material.h"
 #include "Engine/graphics/ShaderProgram.h"
 #include "Engine/graphics/Texture.h"
+#include "Engine/Engine.h"
 
+// to parse the json file we need
+#include <nlohmann/json.hpp>
 namespace GAMEDEV_ENGINE
 {
     void Material::SetShaderProgram(std::shared_ptr<ShaderProgram> shaderProgram)
@@ -54,6 +57,92 @@ namespace GAMEDEV_ENGINE
           }
             
         }
+
+    }
+
+    std::shared_ptr<Material> Material::Load(const std::string& path)
+    {
+        // need to read the content
+        // to do so we need the engine
+
+       auto contents = Engine::GetInstance().GetAssetFileSystem().LoadAssetFileText(path);
+
+       if (contents.empty())
+       {
+           return nullptr;
+       }
+       // if the contents have some information we need to parse the json file
+       nlohmann::json jsonRead = nlohmann::json::parse(contents);
+       std::shared_ptr<Material> result;
+       
+       if (jsonRead.contains("shader"))
+       {
+           auto shaderObj = jsonRead["shader"];
+           std::string vertexPath = shaderObj.value("vertex", "");
+           std::string fragmentPath = shaderObj.value("fragment", "");
+
+           auto& fs = Engine::GetInstance().GetAssetFileSystem();
+           auto vertexSrc = fs.LoadAssetFileText(vertexPath);
+           auto fragmentSrc = fs.LoadAssetFileText(fragmentPath);
+
+           // now to run vertexShader and fragment shader we need GraphicsAPI
+           auto& graphicsAPI = Engine::GetInstance().GetGraphicsAPI();
+           auto shaderProgram = graphicsAPI.CreateShaderProgram(vertexSrc, fragmentSrc);
+
+           // in case there is no shaderProgram conten return null
+           if (!shaderProgram)
+           {
+               return nullptr;
+           }
+
+           result = std::make_shared<Material>();
+           result->SetShaderProgram(shaderProgram);
+       }
+
+       // now for param section
+       if (jsonRead.contains("params"))
+       {
+           auto paramsObj = jsonRead["params"];
+           
+           // for floats
+           if (paramsObj.contains("float"))
+           {
+               for (auto& p : paramsObj["float"])
+               {
+                   std::string name = p.value("name", "");
+                   float value = p.value("value", 0.0f);
+                   result->SetFloatParams(name, value);
+               }
+           }
+           // for 2 params
+           if (paramsObj.contains("float2"))
+           {
+               for (auto& p : paramsObj["float2"])
+               {
+                   std::string name = p.value("name", "");
+                   float v0= p.value("value0", 0.0f);
+                   float v1 = p.value("value1", 0.0f);
+                   result->SetFloatParams2f(name,v0, v1);
+               }
+           }
+
+           // for texture
+                      // for 2 params
+           if (paramsObj.contains("texture"))
+           {
+               for (auto& p : paramsObj["texture"])
+               {
+                   std::string name = p.value("name", "");
+                   std::string texturePath = p.value("path", "");
+                   auto texture = Texture::Load(texturePath);
+                   result->SetTextureParams(name, texture);
+               }
+
+           }
+       }
+       return result;
+
+
     }
 
 
