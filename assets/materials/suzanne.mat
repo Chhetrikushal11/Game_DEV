@@ -1,24 +1,10 @@
 {
-"shader":{
-	"vertex":"shaders/vertex.glsl",
-	"fragment":"shaders/fragment.glsl"
+	"shader": {
+		"vertex": "shaders/vertex.glsl",
+		"fragment": "shaders/fragment.glsl"
 	},
 	"params": {
-		"float": [
-			{
-				"name": "roughness",
-				"value": 0.5
-			}
 
-		],
-		"float2": [
-			{
-				"name": "roughness",
-				"value0": 0.5,
-				"value1": 0.0
-			}
-
-		],
 		"texture": [
 			{
 				"name": "baseColorTexture",
