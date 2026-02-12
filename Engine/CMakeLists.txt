@@ -28,6 +28,7 @@ target_link_libraries(Engine
         glm::glm
         stb
         json
+        cgltf
 )
 
 # Windows-specific settings

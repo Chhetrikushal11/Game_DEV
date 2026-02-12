@@ -71,6 +71,10 @@ target_include_directories(stb INTERFACE external/stb)
 add_library(json INTERFACE)
 target_include_directories(json INTERFACE external/json)
 
+# Add cgltf
+add_library(cgltf INTERFACE)
+target_include_directories(json INTERFACE external/cgltf)
+
 # Define assets directory (development Path)
 set(ASSETS_DIR "${CMAKE_SOURCE_DIR}/assets")
 # Add project components

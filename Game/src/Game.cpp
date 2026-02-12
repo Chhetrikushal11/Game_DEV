@@ -208,7 +208,7 @@ bool Game::Init()
     // creating some object
     auto objectA = _mScene->CreateGameObject("ObjectA");
     objectA->AddComponent(new MeshComponent(_mMaterial, _mMesh));
-    objectA->SetPosition(glm::vec3(0.0f, 2.0f, 0.0f));
+    objectA->SetPosition(glm::vec3(1.0f, 0.0f, -5.0f));
 
     auto objectB  = _mScene->CreateGameObject("ObjectB");
     objectB->AddComponent(new MeshComponent(_mMaterial, _mMesh));
@@ -224,6 +224,15 @@ bool Game::Init()
     objectC->SetScale(glm::vec3(1.5f, 1.5f, 1.5f));
 
 
+    // for loading the mesh
+    auto suzzaneMesh = Mesh::Load("models/suzzane.gltf");
+    auto suzzaneMaterial = Material::Load("materials/suzzane.mat");
+
+    // to create suzzane obj
+    auto suzzaneObj = _mScene->CreateGameObject("Suzzane");
+    suzzaneObj->AddComponent(new MeshComponent(suzzaneMaterial, suzzaneMesh));
+    suzzaneObj->SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
+    
     // Tell Engine about the scene
     Engine::GetInstance().SetCurrentScene(_mScene);
 

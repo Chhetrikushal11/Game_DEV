@@ -12,6 +12,11 @@ namespace GAMEDEV_ENGINE
         GLuint size;  // number of components (e.g., 3 for vec3)
         GLuint type; // data type (e.g., GL_FLOAT)
         uint32_t offset; // offset in bytes from the start of the vertex
+
+        // this is to make sure we know the index of position, color and uv
+        static constexpr int PositionIndex = 0;
+        static constexpr int ColorIndex = 1;
+        static constexpr int UVIndex = 2;
     };
 
     struct VertexLayout

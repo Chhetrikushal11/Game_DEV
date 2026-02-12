@@ -22,7 +22,7 @@
 		"texture": [
 			{
 				"name": "baseColorTexture",
-				"path": "textures/brick.png"
+				"path": "models/Suzanne_BaseColor.png"
 			}
 		]
 	}
