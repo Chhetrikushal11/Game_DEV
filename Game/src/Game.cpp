@@ -20,6 +20,9 @@ bool Game::Init()
     
     // now need to intantiate the _mScene
     _mScene = new Scene();
+
+    // Tell Engine about the scene
+    Engine::GetInstance().SetCurrentScene(_mScene);
     // create a camera
     auto camera = _mScene->CreateGameObject("Camera");
     camera->AddComponent(new CameraComponent());
@@ -130,26 +133,27 @@ bool Game::Init()
 
 
     // Load Suzanne mesh from GLTF
-    auto suzanneMesh = Mesh::Load("models/Suzanne.gltf");
-    if (!suzanneMesh)
-    {
-        std::cerr << "Failed to load Suzanne mesh!" << std::endl;
-        return false;
-    }
-    std::cout << "Suzanne mesh loaded successfully!" << std::endl;
+    //auto suzanneMesh = Mesh::Load("models/Suzanne.gltf");
+    //if (!suzanneMesh)
+    //{
+    //    std::cerr << "Failed to load Suzanne mesh!" << std::endl;
+    //    return false;
+    //}
+    //std::cout << "Suzanne mesh loaded successfully!" << std::endl;
 
-    // Load Suzanne material
-    auto suzanneMaterial = Material::Load("materials/suzanne.mat");
-    if (!suzanneMaterial)
-    {
-        std::cerr << "Failed to load Suzanne material!" << std::endl;
-        return false;
-    }
-    std::cout << "Suzanne material loaded successfully!" << std::endl;
+    //// Load Suzanne material
+    //auto suzanneMaterial = Material::Load("materials/suzanne.mat");
+    //if (!suzanneMaterial)
+    //{
+    //    std::cerr << "Failed to load Suzanne material!" << std::endl;
+    //    return false;
+    //}
+    //std::cout << "Suzanne material loaded successfully!" << std::endl;
 
+  
     // Create Suzanne game object
-    auto suzanneObj = _mScene->CreateGameObject("Suzanne");
-    suzanneObj->AddComponent(new MeshComponent(suzanneMaterial, suzanneMesh));
+    auto suzanneObj = GameObject::LoadGLTF("models / Suzanne.gltf");
+  /*  suzanneObj->AddComponent(new MeshComponent(suzanneMaterial, suzanneMesh)); */
     suzanneObj->SetPosition(glm::vec3(-5.0f, 0.0f, 0.0f));  // Move to the left
 
     // create a light objce
@@ -160,8 +164,7 @@ bool Game::Init()
     lightObj->AddComponent(lightComp);
     lightObj->SetPosition(glm::vec3(0.0f, 5.0f, 0.0f));
     
-    // Tell Engine about the scene
-    Engine::GetInstance().SetCurrentScene(_mScene);
+
 
     std::cout << "Game Initialized" << std::endl;
     return true;

@@ -54,7 +54,11 @@ namespace GAMEDEV_ENGINE
     void SetClearColor(float r, float g, float b, float a);
     void ClearBuffers();
 
+    // for material loading
+    const std::shared_ptr<ShaderProgram>& GetDefaultShaderProgram();
+
     private:
         friend class Engine; // only Engine class can create and destroy GraphicsAPI
+        std::shared_ptr<ShaderProgram> _mDefaultShaderProgram;
     };
 }

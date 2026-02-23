@@ -1,8 +1,6 @@
 #include "Engine/render/mesh.h"
 #include "Engine/Engine.h"
 
-#define CGLTF_IMPLEMENTATION
-#include <cgltf.h>
 
 namespace GAMEDEV_ENGINE
 {
@@ -210,6 +208,7 @@ namespace GAMEDEV_ENGINE
         return result;
     }
 
+#if 0
     std::shared_ptr<Mesh> Mesh::Load(const std::string& path)
     {
         auto contentsRead = Engine::GetInstance().GetAssetFileSystem().LoadAssetFileText(path);
@@ -393,4 +392,5 @@ namespace GAMEDEV_ENGINE
         cgltf_free(data);
         return result;
     }
+#endif
 }   

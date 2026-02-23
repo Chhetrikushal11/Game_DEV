@@ -9,6 +9,7 @@
 
 namespace GAMEDEV_ENGINE
 {
+    class Scene;
     class GameObject
     {
     public:
@@ -24,8 +25,12 @@ namespace GAMEDEV_ENGINE
         void SetName(const std::string& name);
         // getting and setting parent
         GameObject* GetParent() const { return _mParent; }
+        // setting bool value for parents
+        bool SetParent(GameObject* parent);
+        Scene* GetScene() { return _mScene; }
+
         // In GameObject.h under public:
-        void SetParent(GameObject* parent) { _mParent = parent; }
+        // void SetParent(GameObject* parent) { _mParent = parent; }
         // to check if object is alive
         bool IsAlive() const { return _misAlive; }
         // now making the marking for destroy
@@ -47,6 +52,9 @@ namespace GAMEDEV_ENGINE
         glm::mat4 GetWorldTransformMatrix() const;
         // Adding the component management methods
         void AddComponent(Component* component);
+
+        // for loading GLTF
+        static GameObject* LoadGLTF(const std::string& path);
         
         // ✅ OPTIMIZED: GetComponent using TypeID (O(n) but faster than dynamic_cast)
         template<typename T, typename = std::enable_if_t<std::is_base_of_v<Component, T>>>
@@ -73,6 +81,7 @@ namespace GAMEDEV_ENGINE
     private:
         std::string _mName;
         GameObject* _mParent{nullptr};
+        Scene* _mScene{ nullptr };
         // need to add children vector
         std::vector<std::unique_ptr<GameObject>> _mChildren;
         // need to create a contianer for components

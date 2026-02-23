@@ -26,7 +26,9 @@ namespace GAMEDEV_ENGINE
         _mRootGameObjects.emplace_back(gameObject); // store it in the root game objects
         gameObject->SetName(name);
        // gameObject->SetParent(gameObject, parent);
+        gameObject->_mScene = this;
         gameObject->SetParent(parent);
+        
         return gameObject;
 
         }
