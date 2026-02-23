@@ -155,9 +155,10 @@ bool Game::Init()
     // create a light objce
     auto lightObj = _mScene->CreateGameObject("Light");
     auto lightComp =  new LightComponent();
-    lightComp->SetLightColor(glm::vec3(1.0)); // for white color
+    lightComp->SetLightColor(glm::vec3(1.0f, 1.0f,1.0f)); // for white color
+    // add the light component to gameobject
+    lightObj->AddComponent(lightComp);
     lightObj->SetPosition(glm::vec3(0.0f, 5.0f, 0.0f));
-
     
     // Tell Engine about the scene
     Engine::GetInstance().SetCurrentScene(_mScene);

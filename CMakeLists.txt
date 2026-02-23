@@ -16,6 +16,7 @@ endif()
 
 # Find OpenGL
 find_package(OpenGL REQUIRED)
+find_package(OpenGL REQUIRED)
 
 # Find GLFW3 (cross-platform)
 find_package(glfw3 QUIET CONFIG)
