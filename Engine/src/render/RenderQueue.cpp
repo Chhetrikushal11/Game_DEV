@@ -12,7 +12,7 @@ namespace GAMEDEV_ENGINE
         _mCommands.push_back(command);
     }
 
-    void RenderQueue::Draw(GraphicsAPI& graphicsAPI, CameraData& cameraData)
+    void RenderQueue::Draw(GraphicsAPI& graphicsAPI, CameraData& cameraData,const std::vector<LightData>& lights)
     {
         // in draw we iterate over all commands and for each commands 
         for (auto& command : _mCommands)
@@ -23,6 +23,12 @@ namespace GAMEDEV_ENGINE
             // need to pass camera and view projection matrix to the shader
             command.material->GetShaderProgram()->SetUniformMat4f("uView", cameraData.viewMatrix);
             command.material->GetShaderProgram()->SetUniformMat4f("uProjection", cameraData.projectionMatrix);
+            if (!lights.empty())
+            {
+                auto& light = lights[0];
+                command.material->GetShaderProgram()->SetUniform_Lights("uLight.color", light.color);
+                command.material->GetShaderProgram()->SetUniform_Lights("uLight.position", light.position);
+            }
             graphicsAPI.BindMesh(command.mesh);
             graphicsAPI.DrawMesh(command.mesh);
 

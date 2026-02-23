@@ -102,4 +102,11 @@ namespace GAMEDEV_ENGINE
         // this way every game object can be compute with respect to world scene rather than just local space
     } 
 
+    // for world position
+    glm::vec3 GameObject::GetWorldPosition()
+    {
+        glm::vec4 hom = GetWorldTransformMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+        return glm::vec3(hom) / hom.w;
+    }
+
 } // namespace GAMEDEV_ENGINE   

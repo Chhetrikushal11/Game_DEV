@@ -34,6 +34,7 @@ namespace GAMEDEV_ENGINE
         // to manipulate transform later we can add methods here we add getters and setters for position, rotation, scale
         // ----------------------- for position ----------------------- //
         const glm::vec3& GetPosition() const { return _mPosition; }
+        glm::vec3 GetWorldPosition();
         void SetPosition(const glm::vec3& position) { _mPosition = position; }
         // ----------------------- for rotation ----------------------- //
         const glm::quat& GetRotation() const { return _mRotation; }

@@ -6,6 +6,7 @@
 #include <algorithm>
 
 #include "Engine/scene/GameObject.h"
+#include "Engine/Common.h"
 namespace GAMEDEV_ENGINE
 {
     class GameObject;
@@ -35,6 +36,12 @@ namespace GAMEDEV_ENGINE
         // to set and get the camera game object
         void SetMainCameraGameObject(GameObject* cameraGameObject);
         GameObject* GetMainCameraGameObject() const {return _mMainCameraGameObject; };
+        // to get and set the light data
+        std::vector<LightData> CollectLights();
+
+        // for recurssive function we add private helper
+        private:
+            void CollectLightsRecursive(GameObject* obj, std::vector<LightData>& out);
 
         private:
     

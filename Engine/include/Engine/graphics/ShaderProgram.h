@@ -42,6 +42,9 @@ namespace GAMEDEV_ENGINE
 
         // now to use the texture
         void SetTexture(const std::string& name, Texture* texture);
+
+        // now to set the lights
+        void SetUniform_Lights(const std::string& name,const glm::vec3& value);
         private:
             GLuint _mShaderProgramID = 0; // for storing the shader program ID
             // need to create an array to store the uniform locations for local caching to avoid multiple glGetUniformLocation calls

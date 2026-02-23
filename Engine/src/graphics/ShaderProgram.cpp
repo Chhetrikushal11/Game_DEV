@@ -93,7 +93,12 @@ namespace GAMEDEV_ENGINE
 
     }
     
-
+    void ShaderProgram::SetUniform_Lights(const std::string& name,const glm::vec3& value)
+    {
+        auto location = GetUniformLocation(name);
+        glUniform3fv(location, 1, glm::value_ptr(value));
+        // here we are sending one value
+    }
 
 
 

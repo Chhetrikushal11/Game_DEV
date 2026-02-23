@@ -97,6 +97,119 @@ namespace GAMEDEV_ENGINE
         }
     }
 
+    std::shared_ptr<Mesh> Mesh::CreateCube()
+    {
+        std::vector<float> vertices = {
+            // Position (3)      Color (3)         UV (2)
+
+            // FRONT FACE (indices 0-3)
+             0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f, 0.0f, 0.0f, 1.0f, // 0: top-right
+             0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f,  // 1: bottom-right
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f, 0.0f, 0.0f, 1.0f, // 2: bottom-left
+            -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,  0.0f, 0.0f, 1.0f, // 3: top-left
+
+            // BACK FACE (indices 4-7)
+             0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f, -1.0f,  // 4: top-right
+             0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 0.0f, -1.0f,// 5: bottom-right
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f, 0.0f, -1.0f,// 6: bottom-left
+            -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  1.0f, 1.0f, 0.0f, 0.0f, -1.0f, // 7: top-left
+
+            // RIGHT FACE (indices 8-11)
+             0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f, 1.0f, 0.0f,  0.0f, // 8: top-back
+             0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, 1.0f, 0.0f,  0.0f, // 9: bottom-back
+             0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f, 1.0f, 0.0f,  0.0f, // 10: bottom-front
+             0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f, 1.0f, 0.0f,  0.0f, // 11: top-front
+
+             // LEFT FACE (indices 12-15)
+             -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f, -1.0f, 0.0f,  0.0f, // 12: top-front
+             -0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, -1.0f, 0.0f,  0.0f, // 13: bottom-front
+             -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f, -1.0f, 0.0f,  0.0f, // 14: bottom-back
+             -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f, -1.0f, 0.0f,  0.0f, // 15: top-back
+
+             // TOP FACE (indices 16-19)
+             -0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // 16: back-left
+              0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 1.0f, 0.0f, 1.0f, 0.0f, // 17: back-right
+              0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f, 1.0f, 0.0f, // 18: front-right
+             -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f, 0.0f, // 19: front-left
+
+             // BOTTOM FACE (indices 20-23)
+             -0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f,  0.0f, -1.0f, 0.0f, // 20: front-left
+              0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, 0.0f, -1.0f, 0.0f,  // 21: front-right
+              0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f, 0.0f, -1.0f, 0.0f, // 22: back-right
+             -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f, -1.0f, 0.0f   // 23: back-left
+        };
+
+        std::vector<unsigned int> indices = {
+            // FRONT FACE
+            0, 1, 2,
+            0, 2, 3,
+
+            // BACK FACE
+            4, 6, 5,
+            4, 7, 6,
+
+            // RIGHT FACE
+            8, 9, 10,
+            8, 10, 11,
+
+            // LEFT FACE
+            12, 13, 14,
+            12, 14, 15,
+
+            // TOP FACE
+            16, 17, 18,
+            16, 18, 19,
+
+            // BOTTOM FACE
+            20, 21, 22,
+            20, 22, 23
+        };
+
+        // now creating vertex layout object and define the layout structure
+        GAMEDEV_ENGINE::VertexLayout  vertexLayout;
+
+        vertexLayout.elements.push_back(
+            {
+                VertexElement::PositionIndex,
+                3, // number of position attribute
+                GL_FLOAT, // data type
+                0
+            }
+        );
+
+        // for color
+        vertexLayout.elements.push_back(
+            {
+                VertexElement::ColorIndex,
+                3,
+                GL_FLOAT,
+                sizeof(float) * 3
+            });
+
+        // for UV
+        vertexLayout.elements.push_back(
+            {
+                VertexElement::UVIndex,
+                2,
+                GL_FLOAT,
+                sizeof(float) * 6
+            });
+
+            // for Nomrmal
+          vertexLayout.elements.push_back(
+                {
+                    VertexElement::NormalIndex,
+                    3,
+                    GL_FLOAT,
+                    sizeof(float) * 8
+                }
+        );
+
+        vertexLayout.stride = sizeof(float) * 11;
+        auto result = std::make_shared<GAMEDEV_ENGINE::Mesh>(vertexLayout, vertices, indices);
+        return result;
+    }
+
     std::shared_ptr<Mesh> Mesh::Load(const std::string& path)
     {
         auto contentsRead = Engine::GetInstance().GetAssetFileSystem().LoadAssetFileText(path);
@@ -156,7 +269,7 @@ namespace GAMEDEV_ENGINE
 
                 // here we process primitve loading
                 VertexLayout vertexLayout;
-                cgltf_accessor* accessors[3] = { nullptr, nullptr, nullptr }; // need three nullptr for instantition
+                cgltf_accessor* accessors[4] = { nullptr, nullptr, nullptr, nullptr }; // need three nullptr for instantition
 
                 for (cgltf_size ai = 0; ai < primitive.attributes_count; ++ai)
                 {
@@ -201,6 +314,13 @@ namespace GAMEDEV_ENGINE
                         accessors[VertexElement::UVIndex] = acc;
                         element.index = VertexElement::UVIndex;
                         element.size = 2;
+                    }
+                    break;
+                    case cgltf_attribute_type_normal:  // number of tex coordinates
+                    {
+                        accessors[VertexElement::NormalIndex] = acc;
+                        element.index = VertexElement::NormalIndex;
+                        element.size = 3;
                     }
                     break;
                     default:

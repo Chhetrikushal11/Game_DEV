@@ -2,6 +2,8 @@
 #include <vector>
 #include <glm/mat4x4.hpp>
 
+#include"Engine/Common.h"
+
 namespace GAMEDEV_ENGINE
 {
     /*
@@ -21,12 +23,7 @@ namespace GAMEDEV_ENGINE
         glm::mat4 modelMatrix = glm::mat4(1.0f); // this will store world transform for each object
     };
 
-    // CREATING STURCT DATA for CAMERA
-    struct CameraData
-    {
-        glm::mat4 viewMatrix = glm::mat4(1.0f);
-        glm::mat4 projectionMatrix = glm::mat4(1.0f);
-    };
+
 
     class RenderQueue
     {
@@ -34,7 +31,7 @@ namespace GAMEDEV_ENGINE
             // submitting method
             void Submit(const RenderCommand& command);
 
-            void Draw(GraphicsAPI& graphicsAPI, CameraData& cameraData);
+            void Draw(GraphicsAPI& graphicsAPI, CameraData& cameraData, const std::vector<LightData>& lights);
             
         private:
             // to hold the command we will create a container

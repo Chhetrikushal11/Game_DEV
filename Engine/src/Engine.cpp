@@ -167,6 +167,7 @@ void Engine::Run()
          
          // we retrive current scene and update it
          CameraData cameraData;
+         std::vector<LightData> lights;
          int width= 0;
          int height = 0;
          glfwGetWindowSize(_gWindow, &width, &height);
@@ -183,13 +184,15 @@ void Engine::Run()
 
                  }
              }
-       
+
+             // to collect the lights
+             lights = _mCurrentEngineScene->CollectLights();
          }
          
          
 
         // ✅ 3. DRAW (renders submitted commands)
-        _mRenderQueue.Draw(*_sGraphicsAPI, cameraData);
+        _mRenderQueue.Draw(*_sGraphicsAPI, cameraData,lights);
         
         // ✅ 4. SWAP BUFFERS (show result)
         glfwSwapBuffers(_gWindow);

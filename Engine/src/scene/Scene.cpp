@@ -1,4 +1,5 @@
 #include "Engine/scene/Scene.h"
+#include "Engine/scene/Component/LightComponent.h"
 
 
 
@@ -200,4 +201,35 @@ namespace GAMEDEV_ENGINE
     {
         _mMainCameraGameObject = cameraGameObject;
     }   
+
+    std::vector<LightData> Scene::CollectLights()
+    {
+        // here it will recurssively check for the light component in each component. 
+        // if object have light data grab its color in world position.
+        std::vector<LightData> lights;
+        for (auto& obj : _mRootGameObjects)
+        {
+            CollectLightsRecursive(obj.get(), lights);
+        }
+
+        return lights;
+
+    }
+
+    void Scene::CollectLightsRecursive(GameObject* obj, std::vector<LightData>& out)
+    {
+        if (auto light = obj->GetComponent<LightComponent>())
+        {
+            LightData data;
+            data.color = light->GetLightColor();
+            data.position = obj->GetWorldPosition();
+            out.push_back(data);
+        }
+
+        for (auto& child : obj->_mChildren)
+        {
+            CollectLightsRecursive(child.get(), out);
+        }
+    }
+
 }

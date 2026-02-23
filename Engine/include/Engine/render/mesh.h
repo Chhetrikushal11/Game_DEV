@@ -27,6 +27,7 @@ namespace GAMEDEV_ENGINE
         
          // need to create a load file to read gltf file
 
+            static std::shared_ptr<Mesh> CreateCube();
             static std::shared_ptr<Mesh> Load(const std::string& path);
         private:
             GLuint _mVAO = 0; // Vertex Array Object
