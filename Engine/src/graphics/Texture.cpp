@@ -29,10 +29,19 @@ namespace GAMEDEV_ENGINE
 		glGenTextures(1, &_mTextureID); // here we are callilng please write the gpu ID for 1 texture in _mTextureId
 		// now we will bind using glBindTexture
 		glBindTexture(GL_TEXTURE_2D, _mTextureID);
+		// to make sure the 4 channels or 3 channels so we need a logic to handles the channel counts
+		GLint internalFormat = GL_RGB;
+		GLenum format = GL_RGB;
+
+		if (numChannels == 4)
+		{
+			GLint internalFormat = GL_RGBA;
+			GLenum format = GL_RGBA;
+		}
 
 		// now to load data in GPU
 
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 
 		glGenerateMipmap(GL_TEXTURE_2D);
 
@@ -72,4 +81,17 @@ namespace GAMEDEV_ENGINE
 		return result;
 	}
 	
+	std::shared_ptr<Texture> TextureManager::GetorLoadTexture(const std::string& path)
+	{
+		auto it = _mtexture.find(path);
+		if (it != _mtexture.end())
+		{
+			return it->second;
+		}
+
+		auto textureNow = Texture::Load(path);
+		_mtexture[path] = textureNow;
+		return textureNow;
+	}
+
 }

@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h> 
 #include  <memory>
 #include <string>
+#include <unordered_map>
 
 namespace GAMEDEV_ENGINE
 {
@@ -30,5 +31,13 @@ namespace GAMEDEV_ENGINE
 		int _mTextureNumChannels = 0;
 		// declare the Gluint
 		GLuint _mTextureID = 0;
+	};
+
+	class TextureManager
+	{
+	public:
+		std::shared_ptr<Texture> GetorLoadTexture(const std::string& path);
+	private:
+		std::unordered_map < std::string, std::shared_ptr<Texture>> _mtexture;
 	};
 }

@@ -23,6 +23,7 @@ namespace GAMEDEV_ENGINE
             // need to pass camera and view projection matrix to the shader
             command.material->GetShaderProgram()->SetUniformMat4f("uView", cameraData.viewMatrix);
             command.material->GetShaderProgram()->SetUniformMat4f("uProjection", cameraData.projectionMatrix);
+            command.material->GetShaderProgram()->SetUniform3f("uCameraPos", cameraData.position);
             if (!lights.empty())
             {
                 auto& light = lights[0];

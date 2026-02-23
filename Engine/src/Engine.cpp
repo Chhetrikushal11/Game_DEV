@@ -181,6 +181,7 @@ void Engine::Run()
                  {
                      cameraData.viewMatrix = cameraComponent->GetViewMatrix();
                      cameraData.projectionMatrix = cameraComponent->GetProjectionMatrix(aspect);
+                     cameraData.position = cameraGameObject->GetWorldPosition();
 
                  }
              }

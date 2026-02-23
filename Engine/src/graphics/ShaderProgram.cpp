@@ -69,6 +69,11 @@ namespace GAMEDEV_ENGINE
         glUniform2f(GetUniformLocation(name), v0, v1);
     } 
     
+    void ShaderProgram::SetUniform3f(const std::string& name, const glm::vec3& value)
+    {
+        GLint location = GetUniformLocation(name);
+        glUniform3f(location, value.x, value.y, value.z);
+    }
     void ShaderProgram::SetUniformMat4f(const std::string& name, const glm::mat4& mat)
     {
         glUniformMatrix4fv(GetUniformLocation(name),1, GL_FALSE, glm::value_ptr(mat));

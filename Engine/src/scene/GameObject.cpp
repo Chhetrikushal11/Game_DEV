@@ -330,7 +330,7 @@ namespace GAMEDEV_ENGINE
                             if (texture->image->uri)
                             {
                                 auto path = folder / std::string(texture->image->uri);
-                                auto tex = Texture::Load(path.string());
+                                auto tex = Engine::GetInstance().GetTextureManager().GetorLoadTexture(path.string());
                                 mat->SetTextureParams("baseColorTexture", tex);
                             }
                         }
@@ -344,14 +344,15 @@ namespace GAMEDEV_ENGINE
                             if (texture->image->uri)
                             {
                                 auto path = folder / std::string(texture->image->uri);
-                                auto tex = Texture::Load(path.string());
+                                auto tex = Engine::GetInstance().GetTextureManager().GetorLoadTexture(path.string());
                                 mat->SetTextureParams("baseColorTexture", tex);
                             }
                         }
                     }
 
-                    object->AddComponent(new MeshComponent(mat, mesh));
                 }
+
+                object->AddComponent(new MeshComponent(mat, mesh));
             }
         }
         for (cgltf_size ci = 0; ci < node->children_count; ++ci)
@@ -367,7 +368,7 @@ namespace GAMEDEV_ENGINE
         // we will follow same procedure we follow in mesh load
         // step 1 :Read the file content
          // we can load file using GetInstance()
-        auto contents = Engine::GetInstance().GetAssetFileSystem().LoadAssetFile(path);
+        auto contents = Engine::GetInstance().GetAssetFileSystem().LoadAssetFileText(path);
         if (contents.empty())
         {
             return nullptr;

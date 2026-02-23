@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 #include "Engine/input/InputManager.h"
 #include "Engine/graphics/GraphicsAPI.h"
+#include "Engine/graphics/Texture.h"
 #include "Engine/render/RenderQueue.h"
 #include "Engine/scene/Scene.h"
 #include "Engine/io/AssetFileSystem.h"
@@ -54,6 +55,9 @@ namespace GAMEDEV_ENGINE
 
         // adding Getter method for the file system
         AssetFileSystem& GetAssetFileSystem() { return _mAssetFileSystem; }
+
+        // now to get the texture manager
+        TextureManager& GetTextureManager() { return _mTextureManager; }
         private:
         Application* _mApplication;
         std::chrono::high_resolution_clock::time_point _mLastFrameTime;
@@ -64,6 +68,7 @@ namespace GAMEDEV_ENGINE
         std::unique_ptr<Scene> _mCurrentEngineScene;
         // need to add FileSystem
         AssetFileSystem  _mAssetFileSystem;
-
+        // for handling TextureManager
+        TextureManager _mTextureManager;
     };
 }

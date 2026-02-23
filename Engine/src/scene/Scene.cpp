@@ -107,6 +107,7 @@ namespace GAMEDEV_ENGINE
                         std::unique_ptr<GameObject> tempPtr(obj);
                         _mRootGameObjects.emplace_back(std::move(tempPtr));
                         // here we create a temporary unique ptr to transfer the ownership to root game objects
+                        obj->_mParent = parent;
                         result = true;
                     }
 
@@ -179,7 +180,7 @@ namespace GAMEDEV_ENGINE
                     std::unique_ptr<GameObject> tempPtr(obj); // create a temporary unique ptr to transfer ownership
                     // here we create a temporary unique ptr to transfer the ownership to parent's children list
                     parent->_mChildren.emplace_back(std::move(tempPtr));
-                    obj->_mParent = parent;
+                    /*obj->_mParent = parent;*/
                     result = true;
                 }
                 else

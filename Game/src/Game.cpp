@@ -152,9 +152,17 @@ bool Game::Init()
 
   
     // Create Suzanne game object
-    auto suzanneObj = GameObject::LoadGLTF("models / Suzanne.gltf");
+    auto suzanneObj = GameObject::LoadGLTF("models/Suzanne/Suzanne.gltf");
   /*  suzanneObj->AddComponent(new MeshComponent(suzanneMaterial, suzanneMesh)); */
     suzanneObj->SetPosition(glm::vec3(-5.0f, 0.0f, 0.0f));  // Move to the left
+
+    // for the FPS
+    auto gunObj = GameObject::LoadGLTF("models/sten_gunmachine_carbine/scene.gltf");
+    // we will attach weapon as child object of the camera
+    gunObj->SetParent(camera);
+    gunObj->SetPosition(glm::vec3(0.75f, -0.5f, -0.75f));
+    gunObj->SetScale(glm::vec3(-1.0f, 1.0f, 1.0f));
+
 
     // create a light objce
     auto lightObj = _mScene->CreateGameObject("Light");

@@ -36,7 +36,9 @@ namespace GAMEDEV_ENGINE
        
         // for SetUnifrom for 2f
         void SetUniform2f(const std::string& name,float v0, float v1);
-
+        
+        // for SetUnifrom for 3f
+        void ShaderProgram::SetUniform3f(const std::string& name, const glm::vec3& value);
         // to use matrix 4x4 for seting uniform
         void SetUniformMat4f(const std::string& name, const glm::mat4& mat);
 
