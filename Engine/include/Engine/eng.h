@@ -21,4 +21,5 @@
 #include "Engine/scene/Component/MeshComponent.h"
 #include "Engine/scene/Component/CameraComponent.h"
 #include "Engine/scene/Component/PlayerControllerComponent.h"
+#include "Engine/scene/Component/AnimationComponent.h"
 #include "io/AssetFileSystem.h"

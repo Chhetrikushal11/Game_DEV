@@ -56,6 +56,10 @@ namespace GAMEDEV_ENGINE
         // for loading GLTF
         static GameObject* LoadGLTF(const std::string& path);
         
+        // for isActive
+        void SetActive(bool active);
+        bool IsActive() const { return _mActive; }
+        
         // ✅ OPTIMIZED: GetComponent using TypeID (O(n) but faster than dynamic_cast)
         template<typename T, typename = std::enable_if_t<std::is_base_of_v<Component, T>>>
         T* GetComponent()
@@ -73,6 +77,9 @@ namespace GAMEDEV_ENGINE
             }
             return nullptr;
         }
+
+        // to find child by name
+        GameObject* FindChildByName(const std::string& name);
         
     protected:
         // to avoid direct instantiation
@@ -91,6 +98,7 @@ namespace GAMEDEV_ENGINE
         glm::vec3 _mPosition{0.0f, 0.0f, 0.0f};
         glm::quat _mRotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f); // identity quaternian
         glm::vec3 _mScale{1.0f, 1.0f, 1.0f};
+        bool _mActive = true;
         // declaring scene as friend class to access private members
         friend class Scene;
     };

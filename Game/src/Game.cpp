@@ -163,6 +163,20 @@ bool Game::Init()
     gunObj->SetPosition(glm::vec3(0.75f, -0.5f, -0.75f));
     gunObj->SetScale(glm::vec3(-1.0f, 1.0f, 1.0f));
 
+    if (auto anim = gunObj->GetComponent<AnimationComponent>())
+    {
+        if (auto bullet = gunObj->FindChildByName("bullet_33"))
+        {
+           // bullet->SetActive(false);
+        }
+
+        if (auto fire = gunObj->FindChildByName("BOOM_35"))
+        {
+           // fire->SetActive(false);
+        }
+        
+        anim->Play("shoot",true);
+    }
 
     // create a light objce
     auto lightObj = _mScene->CreateGameObject("Light");
