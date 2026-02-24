@@ -174,8 +174,16 @@ bool Game::Init()
         {
            // fire->SetActive(false);
         }
-        
-        anim->Play("shoot",true);
+ 
+      //  anim->Play("shoot");
+        if (anim)
+        {
+            // Try to play
+            anim->Play("shoot", false);
+
+            // Or explicitly provide both parameters
+            anim->Play("shoot", true);
+        }
     }
 
     // create a light objce

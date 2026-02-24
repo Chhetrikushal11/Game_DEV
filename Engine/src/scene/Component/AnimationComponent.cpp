@@ -1,5 +1,6 @@
 #include "Engine/scene/Component/AnimationComponent.h"
 #include "Engine/scene/GameObject.h"
+#include <iostream>
 
 namespace GAMEDEV_ENGINE
 {
@@ -29,6 +30,14 @@ namespace GAMEDEV_ENGINE
 				_mIsPlaying = false;
 				return;
 			}
+		}
+		static float timer = 0;
+		timer += deltaTime;
+		if (timer > 1.0f)
+		{
+			std::cout << "Playing: " << _mClip->name
+				<< " Time: " << _mTime << std::endl;
+			timer = 0;
 		}
 
 		for (auto& binding : _mBindings)
@@ -74,11 +83,13 @@ namespace GAMEDEV_ENGINE
 
 	void AnimationComponent::Play(const std::string& name, bool loop)
 	{
+		std::cout << "Play called: " << name << " | Clips available: " << _mClips.size() << std::endl;
 		if (_mClip && _mClip->name == name)
 		{
 			_mTime = 0.0f;
 			_mIsPlaying = true;
 			_mLooping = loop;
+			return;
 		}
 
 		else
