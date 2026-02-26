@@ -62,6 +62,8 @@ namespace GAMEDEV_ENGINE
 
         // now to get the physics manager
         PhysicsManager& GetPhysicsManager() { return _mPhyicsManager;  }
+
+        GLFWwindow* GetWindow() const { return _gWindow; }
         private:
         Application* _mApplication;
         std::chrono::high_resolution_clock::time_point _mLastFrameTime;

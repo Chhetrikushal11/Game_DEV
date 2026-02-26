@@ -54,6 +54,15 @@ namespace GAMEDEV_ENGINE
         _mMousePositionOld = pos;
     }
 
+    void InputManager::SetMousePositionChanged(bool changed)
+    {
+        _mMousePositionChanged = changed;
+    }
+
+    bool InputManager::IsMousePositionChanged() const
+    {
+        return _mMousePositionChanged;
+    }
    
 
 }

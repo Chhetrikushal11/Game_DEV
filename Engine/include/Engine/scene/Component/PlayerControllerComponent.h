@@ -14,6 +14,10 @@ namespace GAMEDEV_ENGINE
 		// to capture mouse sensitivity and mouse speed
 		float _mSensitivity = 1.5f; // how quickly we turn when we turn the mouse
 		float _mMoveSpeed = 5.0f; // how fast we move when pressing keys
+		float _mXRot = 0.0f;
+		float _mYRot = 0.0f;
+		bool _mCursorLocked = true;
+		bool _mTabWasPressed = false;
 
 	};
 }

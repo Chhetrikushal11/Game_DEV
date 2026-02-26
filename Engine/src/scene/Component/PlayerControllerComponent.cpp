@@ -12,9 +12,20 @@ namespace GAMEDEV_ENGINE
     {
         auto& inputManager = Engine::GetInstance().GetInputManager();
         auto rotation = _mGameObjectOwner->GetRotation();
+        // ── Tab toggle ── must be OUTSIDE the mouse check ──────────────
+        bool tabNow = inputManager.IskeyPressed(GLFW_KEY_TAB);
+        if (tabNow && !_mTabWasPressed)
+        {
+            _mCursorLocked = !_mCursorLocked;
+            glfwSetInputMode(Engine::GetInstance().GetWindow(),
+                GLFW_CURSOR,
+                _mCursorLocked ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+        }
+        _mTabWasPressed = tabNow;
+        // ──────────────────────────────────────────────────────────────────
 
         // Mouse rotation
-        if (inputManager.IsMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
+        if (inputManager.IsMousePositionChanged() && _mCursorLocked)
         {
             const auto& oldPos = inputManager.GetMousePositionOld();
             const auto& current = inputManager.GetMousePositionCurrent(); 
@@ -31,11 +42,13 @@ namespace GAMEDEV_ENGINE
             // converting it to quaterion
             glm::quat yRot = glm::angleAxis(yAngle, glm::vec3(0.0f, 1.0f, 0.0f));
 
+            // Pitch — clamp accumulated total
+            _mXRot += -deltaY * _mSensitivity * deltaTime;
+            _mXRot = std::clamp(_mXRot, glm::radians(-80.0f), glm::radians(89.0f));
+
             // vertical rotation around local x -axis
-            float xAngle = -deltaX * _mSensitivity * deltaTime;
-            glm::vec3 right = rotation * glm::vec3(1.0f, 0.0f, 0.0f); // first we need to get the right vector
-            glm::quat xRot = glm::angleAxis(xAngle, right);
-            
+            glm::vec3 right = rotation * glm::vec3(1.0f, 0.0f, 0.0f);
+            glm::quat xRot = glm::angleAxis(_mXRot, right);
            // to combine we multiply the xRot with yRot
             glm::quat deltaRot = yRot * xRot;
 
@@ -44,6 +57,8 @@ namespace GAMEDEV_ENGINE
 
             // ===========================================================
             _mGameObjectOwner->SetRotation(rotation);
+
+
         }
 
 

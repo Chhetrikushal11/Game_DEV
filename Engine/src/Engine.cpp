@@ -122,6 +122,7 @@ bool Engine::Init(int width, int height, const char* title)
             Engine::GetInstance().mouseCursorCallback(window, xPos, yPos);
         });
 
+    glfwSetInputMode(_gWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     _sGraphicsAPI->Init();
     // call the Physics Manager .init
     _mPhyicsManager.Init();
@@ -202,7 +203,8 @@ void Engine::Run()
         glfwSwapBuffers(_gWindow);
 
         // we need to update the OldPosition with current mouse position current
-        _mInputManager.SetMousePositionOld(_mInputManager.GetMousePositionCurrent());
+        /*_mInputManager.SetMousePositionOld(_mInputManager.GetMousePositionCurrent());*/
+        _mInputManager.SetMousePositionChanged(false);
     }
     
     std::cout << "Game loop ended" << std::endl;
@@ -257,11 +259,18 @@ void Engine::Run()
     // ============================================
     void Engine::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
     {
-        if(action == GLFW_PRESS)
+        // Prevent GLFW from processing Escape as a close signal
+        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        {
+            // do nothing — let PlayerController handle it via InputManager
+            // do NOT call glfwSetWindowShouldClose here
+        }
+
+        if (action == GLFW_PRESS)
         {
             _mInputManager.SetKeyPressed(key, true);
         }
-        else if(action == GLFW_RELEASE)
+        else if (action == GLFW_RELEASE)
         {
             _mInputManager.SetKeyPressed(key, false);
         }
@@ -291,6 +300,7 @@ void Engine::Run()
         _mInputManager.SetMousePositionOld(_mInputManager.GetMousePositionCurrent());
         glm::vec2 currentPos(static_cast<float>(xPos), static_cast<float>(yPos));
         _mInputManager.SetMousePositionCurrent(currentPos);
+        _mInputManager.SetMousePositionChanged(true);
     }
     // =================================================
     // MouseCursorPosition

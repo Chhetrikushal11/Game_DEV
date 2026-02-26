@@ -36,6 +36,9 @@ namespace GAMEDEV_ENGINE
 
         void SetMousePositionCurrent(const glm::vec2& pos);
         const glm::vec2& GetMousePositionCurrent() const {return _mMousePositionCurrent;}
+
+        void SetMousePositionChanged(bool changed);
+        bool IsMousePositionChanged() const;
     private:
         std::array<bool, 256> _mKeys = { false }; // assuming 256 keys
         // an extra array to hold the states of mouse speciifically
@@ -44,6 +47,8 @@ namespace GAMEDEV_ENGINE
         glm::vec2 _mMousePositionOld = glm::vec2(0.0f);
         glm::vec2 _mMousePositionCurrent = glm::vec2(0.0f);
         /*glm::vec2 _mMousePositionNew = glm::vec2(0.0f);*/
+
+        bool _mMousePositionChanged = false;
 
         friend class Engine; // only Engine class can create and destroy InputManager
       
