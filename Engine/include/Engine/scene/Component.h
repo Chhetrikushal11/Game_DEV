@@ -11,6 +11,8 @@ namespace GAMEDEV_ENGINE
 
             virtual void Update(float deltaTime) = 0; // Virtual update method for polymorphism
 
+            // for init class
+            virtual void Init();
 
             // Get the runtime type ID of this component instance
             virtual size_t GetTypeId() const = 0;

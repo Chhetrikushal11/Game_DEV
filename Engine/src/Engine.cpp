@@ -123,6 +123,8 @@ bool Engine::Init(int width, int height, const char* title)
         });
 
     _sGraphicsAPI->Init();
+    // call the Physics Manager .init
+    _mPhyicsManager.Init();
     return _mApplication->Init();
 
   
@@ -163,6 +165,7 @@ void Engine::Run()
         _sGraphicsAPI->ClearBuffers();
         
         // ✅ 2. UPDATE (submits render commands)
+        _mPhyicsManager.Update(deltaTime.count());
         _mApplication->Update(deltaTime.count());
          
          // we retrive current scene and update it

@@ -22,4 +22,5 @@
 #include "Engine/scene/Component/CameraComponent.h"
 #include "Engine/scene/Component/PlayerControllerComponent.h"
 #include "Engine/scene/Component/AnimationComponent.h"
+#include "Engine/Physics/PhysicsManager.h"
 #include "io/AssetFileSystem.h"

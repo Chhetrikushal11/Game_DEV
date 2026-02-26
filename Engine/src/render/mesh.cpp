@@ -7,7 +7,7 @@ namespace GAMEDEV_ENGINE
     Mesh::Mesh(const VertexLayout& layout, const std::vector<float>& vertices, const std::vector<uint32_t>& indices)
     : _mVertexLayout{layout},
         _mIndexCount{indices.size()},
-        __mVertexCount{vertices.size() / (layout.stride / sizeof(float))}// calculate number of vertices
+        _mVertexCount{vertices.size() / (layout.stride / sizeof(float))}// calculate number of vertices
     {
         auto& graphicsAPI = Engine::GetInstance().GetGraphicsAPI();
         _mVBO =  graphicsAPI.CreateVertexBuffer(vertices);
@@ -54,7 +54,7 @@ namespace GAMEDEV_ENGINE
 
         Mesh::Mesh(const VertexLayout& layout, const std::vector<float>& vertices)
         : _mVertexLayout{layout},
-        __mVertexCount{vertices.size() / (layout.stride / sizeof(float))}// calculate number of vertices
+        _mVertexCount{vertices.size() / (layout.stride / sizeof(float))}// calculate number of vertices
     {
                 auto& graphicsAPI = Engine::GetInstance().GetGraphicsAPI();
         _mVBO =  graphicsAPI.CreateVertexBuffer(vertices);
@@ -88,53 +88,54 @@ namespace GAMEDEV_ENGINE
 
         else
         {
-            glDrawArrays(GL_TRIANGLES, 0, __mVertexCount);
+            glDrawArrays(GL_TRIANGLES, 0, _mVertexCount);
             // the difference between glDrawElements and glDrawArrays is that glDrawElements uses the index buffer to draw the vertices
             // while glDrawArrays draws the vertices in the order they are stored in the vertex buffer
             
         }
     }
 
-    std::shared_ptr<Mesh> Mesh::CreateCube()
+    std::shared_ptr<Mesh> Mesh::CreateBox(const glm::vec3& extents)
     {
+        const glm::vec3 half = extents * 0.5f;
         std::vector<float> vertices = {
             // Position (3)      Color (3)         UV (2)
 
             // FRONT FACE (indices 0-3)
-             0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f, 0.0f, 0.0f, 1.0f, // 0: top-right
-             0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f,  // 1: bottom-right
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f, 0.0f, 0.0f, 1.0f, // 2: bottom-left
-            -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,  0.0f, 0.0f, 1.0f, // 3: top-left
+             half.x,  half.y,  half.z,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f, 0.0f, 0.0f, 1.0f, // 0: top-right
+             half.x, -half.y,  half.z,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f,  // 1: bottom-right
+            -half.x, -half.y,  half.z,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f, 0.0f, 0.0f, 1.0f, // 2: bottom-left
+            -half.x,  half.y,  half.z,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,  0.0f, 0.0f, 1.0f, // 3: top-left
 
             // BACK FACE (indices 4-7)
-             0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f, -1.0f,  // 4: top-right
-             0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 0.0f, -1.0f,// 5: bottom-right
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f, 0.0f, -1.0f,// 6: bottom-left
-            -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  1.0f, 1.0f, 0.0f, 0.0f, -1.0f, // 7: top-left
+             half.x,  half.y, -half.z,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f, -1.0f,  // 4: top-right
+             half.x, -half.y, -half.z,  0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 0.0f, -1.0f,// 5: bottom-right
+            -half.x, -half.y, -half.z,  0.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f, 0.0f, -1.0f,// 6: bottom-left
+            -half.x,  half.y, -half.z,  1.0f, 1.0f, 0.0f,  1.0f, 1.0f, 0.0f, 0.0f, -1.0f, // 7: top-left
 
             // RIGHT FACE (indices 8-11)
-             0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f, 1.0f, 0.0f,  0.0f, // 8: top-back
-             0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, 1.0f, 0.0f,  0.0f, // 9: bottom-back
-             0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f, 1.0f, 0.0f,  0.0f, // 10: bottom-front
-             0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f, 1.0f, 0.0f,  0.0f, // 11: top-front
+             half.x,  half.y, -half.z,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f, 1.0f, 0.0f,  0.0f, // 8: top-back
+             half.x, -half.y, -half.z,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, 1.0f, 0.0f,  0.0f, // 9: bottom-back
+             half.x, -half.y,  half.z,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f, 1.0f, 0.0f,  0.0f, // 10: bottom-front
+             half.x,  half.y,  half.z,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f, 1.0f, 0.0f,  0.0f, // 11: top-front
 
              // LEFT FACE (indices 12-15)
-             -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f, -1.0f, 0.0f,  0.0f, // 12: top-front
-             -0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, -1.0f, 0.0f,  0.0f, // 13: bottom-front
-             -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f, -1.0f, 0.0f,  0.0f, // 14: bottom-back
-             -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f, -1.0f, 0.0f,  0.0f, // 15: top-back
+             -half.x,  half.y,  half.z,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f, -1.0f, 0.0f,  0.0f, // 12: top-front
+             -half.x, -half.y,  half.z,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, -1.0f, 0.0f,  0.0f, // 13: bottom-front
+             -half.x, -half.y, -half.z,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f, -1.0f, 0.0f,  0.0f, // 14: bottom-back
+             -half.x,  half.y, -half.z,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f, -1.0f, 0.0f,  0.0f, // 15: top-back
 
              // TOP FACE (indices 16-19)
-             -0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // 16: back-left
-              0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 1.0f, 0.0f, 1.0f, 0.0f, // 17: back-right
-              0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f, 1.0f, 0.0f, // 18: front-right
-             -0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f, 0.0f, // 19: front-left
+             -half.x,  half.y, -half.z,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // 16: back-left
+              half.x,  half.y, -half.z,  0.0f, 1.0f, 0.0f,  1.0f, 1.0f, 0.0f, 1.0f, 0.0f, // 17: back-right
+              half.x,  half.y,  half.z,  0.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f, 1.0f, 0.0f, // 18: front-right
+             -half.x,  half.y,  half.z,  1.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f, 0.0f, // 19: front-left
 
              // BOTTOM FACE (indices 20-23)
-             -0.5f, -0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f,  0.0f, -1.0f, 0.0f, // 20: front-left
-              0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, 0.0f, -1.0f, 0.0f,  // 21: front-right
-              0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f, 0.0f, -1.0f, 0.0f, // 22: back-right
-             -0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f, -1.0f, 0.0f   // 23: back-left
+             -half.x, -half.y,  half.z,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f,  0.0f, -1.0f, 0.0f, // 20: front-left
+              half.x, -half.y,  half.z,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, 0.0f, -1.0f, 0.0f,  // 21: front-right
+              half.x, -half.y, -half.z,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f, 0.0f, -1.0f, 0.0f, // 22: back-right
+             -half.x, -half.y, -half.z,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f, -1.0f, 0.0f   // 23: back-left
         };
 
         std::vector<unsigned int> indices = {

@@ -55,6 +55,7 @@ namespace GAMEDEV_ENGINE
 
         // for loading GLTF
         static GameObject* LoadGLTF(const std::string& path);
+
         
         // for isActive
         void SetActive(bool active);

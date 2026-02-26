@@ -10,6 +10,7 @@
 #include "Engine/render/RenderQueue.h"
 #include "Engine/scene/Scene.h"
 #include "Engine/io/AssetFileSystem.h"
+#include "Engine/Physics/PhysicsManager.h"
 
 namespace GAMEDEV_ENGINE 
 {
@@ -58,6 +59,9 @@ namespace GAMEDEV_ENGINE
 
         // now to get the texture manager
         TextureManager& GetTextureManager() { return _mTextureManager; }
+
+        // now to get the physics manager
+        PhysicsManager& GetPhysicsManager() { return _mPhyicsManager;  }
         private:
         Application* _mApplication;
         std::chrono::high_resolution_clock::time_point _mLastFrameTime;
@@ -70,5 +74,7 @@ namespace GAMEDEV_ENGINE
         AssetFileSystem  _mAssetFileSystem;
         // for handling TextureManager
         TextureManager _mTextureManager;
+        // for handling PhysicsManager
+        PhysicsManager _mPhyicsManager;
     };
 }

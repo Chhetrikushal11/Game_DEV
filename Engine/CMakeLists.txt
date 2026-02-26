@@ -23,12 +23,15 @@ endif()
 # Link other libraries
 target_link_libraries(Engine
     PUBLIC
-        OpenGL::GL
-        GLEW::GLEW
-        glm::glm
-        stb
-        json
-        cgltf
+    OpenGL::GL
+    glfw
+    GLEW::GLEW
+    glad
+    glm::glm
+    stb
+    json
+    cgltf
+    BulletPhysics
 )
 
 # Windows-specific settings

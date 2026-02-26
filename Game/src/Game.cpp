@@ -6,6 +6,8 @@
 #include "Engine/scene/Component/CameraComponent.h"
 #include "Engine/scene/Component/LightComponent.h"
 #include "Engine/scene/Component/PlayerControllerComponent.h"
+#include "Engine/scene/Component/PhysicsComponent.h"
+#include "Engine/Physics/RigidBody.h"
 #include "TestObject.h"
 
 
@@ -105,7 +107,7 @@ bool Game::Init()
     // after shader program initialization we need to set the shader program to material
     // we create material manually here
     auto _mMaterial = Material::Load("materials/brick.mat");
-    auto _mMesh = Mesh::CreateCube();
+    auto _mMesh = Mesh::CreateBox();
     // this way mateiral is ready to be used in rendering
 
     // we using rectangle mesh for testing
@@ -167,23 +169,16 @@ bool Game::Init()
     {
         if (auto bullet = gunObj->FindChildByName("bullet_33"))
         {
-           // bullet->SetActive(false);
+           bullet->SetActive(false);
         }
 
         if (auto fire = gunObj->FindChildByName("BOOM_35"))
         {
-           // fire->SetActive(false);
+            fire->SetActive(false);
         }
  
-      //  anim->Play("shoot");
-        if (anim)
-        {
-            // Try to play
-            anim->Play("shoot", false);
+      anim->Play("shoot");
 
-            // Or explicitly provide both parameters
-            anim->Play("shoot", true);
-        }
     }
 
     // create a light objce
@@ -194,8 +189,28 @@ bool Game::Init()
     lightObj->AddComponent(lightComp);
     lightObj->SetPosition(glm::vec3(0.0f, 5.0f, 0.0f));
     
+    // create ground object
+    auto groundObj = _mScene->CreateGameObject("Ground");
+    groundObj->SetPosition(glm::vec3(0.0f, -5.0f, 0.0f));
 
+    glm::vec3 groundExtents(20.0f, 2.0f, 20.0f);
+    auto groundMesh = Mesh::CreateBox(groundExtents);
+    groundObj->AddComponent(new MeshComponent(_mMaterial, groundMesh));
 
+    auto groundCollider = std::make_shared<BoxCollider>(groundExtents);
+    auto groundBody = std::make_shared<RigidBody>(BodyType::Static, groundCollider, 0.0f, 0.5f);
+    groundObj->AddComponent(new PhysicsComponent(groundBody));
+
+    auto boxObj = _mScene->CreateGameObject("FailingBox");
+    boxObj->AddComponent(new MeshComponent(_mMaterial, _mMesh));
+    boxObj->SetPosition(glm::vec3(0.0f, 2.0f, 2.0f));
+    boxObj->SetRotation(glm::quat(glm::vec3(1.0f, 2.0f, 0.0f)));
+    auto boxCollider = std::make_shared<BoxCollider>(glm::vec3(1.0f));
+    auto boxBody = std::make_shared<RigidBody>(
+        BodyType::Dynamic, boxCollider, 5.0f, 0.5f);
+    boxObj->AddComponent(new PhysicsComponent(boxBody));
+
+    camera->SetPosition(glm::vec3(0.0f, 1.0f, 7.0f));
     std::cout << "Game Initialized" << std::endl;
     return true;
 }

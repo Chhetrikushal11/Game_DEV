@@ -1,6 +1,9 @@
 #pragma once
 
-#include <GL/glew.h>
+#include <vector>
+#include <glm/glm.hpp>
+#include <GL/glew.h>        // 1. GLEW FIRST!
+#include <GLFW/glfw3.h>     // 2. GLFW SECOND!
 #include <memory>
 #include <string>
 
@@ -27,7 +30,7 @@ namespace GAMEDEV_ENGINE
         
          // need to create a load file to read gltf file
 
-            static std::shared_ptr<Mesh> CreateCube();
+            static std::shared_ptr<Mesh> CreateBox(const glm::vec3& extents = glm::vec3(1.0f));
            /* static std::shared_ptr<Mesh> Load(const std::string& path);*/
         private:
             GLuint _mVAO = 0; // Vertex Array Object
@@ -35,7 +38,7 @@ namespace GAMEDEV_ENGINE
             GLuint _mEBO = 0; // Element Buffer Object
 
             size_t _mIndexCount = 0; // number of indices
-            size_t __mVertexCount = 0; // number of vertices
+            size_t _mVertexCount = 0; // number of vertices
 
             VertexLayout _mVertexLayout;
     };  

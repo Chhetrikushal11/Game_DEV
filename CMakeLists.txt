@@ -14,14 +14,12 @@ elseif(UNIX)
     message(STATUS "Building for Linux")
 endif()
 
-# Find OpenGL
-find_package(OpenGL REQUIRED)
+# Find OpenGL (removed duplicate)
 find_package(OpenGL REQUIRED)
 
 # Find GLFW3 (cross-platform)
 find_package(glfw3 QUIET CONFIG)
 if(NOT glfw3_FOUND)
-    # Linux fallback using pkg-config
     if(UNIX AND NOT APPLE)
         find_package(PkgConfig REQUIRED)
         pkg_check_modules(GLFW REQUIRED glfw3)
@@ -33,7 +31,6 @@ endif()
 # Find GLM (cross-platform)
 find_package(glm QUIET CONFIG)
 if(NOT glm_FOUND)
-    # Fallback: find headers directly
     find_path(GLM_INCLUDE_DIR glm/glm.hpp
         PATHS /usr/include /usr/local/include
     )
@@ -50,7 +47,6 @@ endif()
 # Find or build GLEW
 find_package(GLEW QUIET CONFIG)
 if(NOT GLEW_FOUND)
-    # Build GLEW from source
     message(STATUS "Building GLEW from source")
     file(GLOB GLEW_SOURCES external/glew/src/glew.c)
     add_library(GLEW STATIC ${GLEW_SOURCES})
@@ -72,12 +68,58 @@ target_include_directories(stb INTERFACE external/stb)
 add_library(json INTERFACE)
 target_include_directories(json INTERFACE external/json)
 
-# Add cgltf
+# Add cgltf (fixed typo - was targeting json twice)
 add_library(cgltf INTERFACE)
-target_include_directories(json INTERFACE external/cgltf)
+target_include_directories(cgltf INTERFACE external/cgltf)
 
-# Define assets directory (development Path)
+# ===================================================================
+# Bullet Physics - Lean Build Configuration
+# ===================================================================
+message(STATUS "Configuring Bullet3 Physics...")
+
+# Set Bullet options BEFORE add_subdirectory (critical!)
+set(BUILD_BULLET2_DEMOS OFF CACHE BOOL "" FORCE)
+set(BUILD_UNIT_TESTS OFF CACHE BOOL "" FORCE)
+set(BUILD_CPU_DEMOS OFF CACHE BOOL "" FORCE)
+set(BUILD_EXTRAS OFF CACHE BOOL "" FORCE)
+set(BUILD_OPENGL3_DEMOS OFF CACHE BOOL "" FORCE)
+set(BUILD_BULLET3 OFF CACHE BOOL "" FORCE)
+set(USE_MSVC_RUNTIME_LIBRARY_DLL ON CACHE BOOL "" FORCE)
+set(USE_GRAPHICAL_BENCHMARK OFF CACHE BOOL "" FORCE)
+
+# Only build what we need: Core Bullet libraries
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+
+# Add Bullet subdirectory
+add_subdirectory(external/bullet3-3.25)
+
+# Create a clean interface target that links the essentials
+add_library(BulletPhysics INTERFACE)
+target_link_libraries(BulletPhysics INTERFACE
+    BulletDynamics
+    BulletCollision
+    LinearMath
+)
+target_include_directories(BulletPhysics INTERFACE 
+    ${CMAKE_SOURCE_DIR}/external/bullet3-3.25/src
+)
+
+# Optional: Suppress Bullet warnings if needed
+if(MSVC)
+    target_compile_options(BulletDynamics PRIVATE /W3)
+    target_compile_options(BulletCollision PRIVATE /W3)
+    target_compile_options(LinearMath PRIVATE /W3)
+else()
+    target_compile_options(BulletDynamics PRIVATE -w)
+    target_compile_options(BulletCollision PRIVATE -w)
+    target_compile_options(LinearMath PRIVATE -w)
+endif()
+
+message(STATUS "Bullet3 configured (lean build)")
+
+# Define assets directory
 set(ASSETS_DIR "${CMAKE_SOURCE_DIR}/assets")
+
 # Add project components
 add_subdirectory(Engine)
 add_subdirectory(Game)
