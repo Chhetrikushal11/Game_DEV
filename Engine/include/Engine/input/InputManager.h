@@ -40,7 +40,7 @@ namespace GAMEDEV_ENGINE
         void SetMousePositionChanged(bool changed);
         bool IsMousePositionChanged() const;
     private:
-        std::array<bool, 256> _mKeys = { false }; // assuming 256 keys
+        std::array<bool, 512> _mKeys = { false }; // assuming 256 keys
         // an extra array to hold the states of mouse speciifically
         std::array<bool, 16>_mMouseKeys = { false };
         // now we need two variables to hold current and previous frame position value

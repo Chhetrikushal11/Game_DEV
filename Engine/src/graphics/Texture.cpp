@@ -59,7 +59,7 @@ namespace GAMEDEV_ENGINE
 
 		// need to build path to asset
 		auto& afs = Engine::GetInstance().GetAssetFileSystem();
-		auto fullpath = afs.GetAssetsFolder() / "textures/brick.png";
+		auto fullpath = afs.GetAssetsFolder() / path;
 
 		if (!std::filesystem::exists(fullpath))
 		{
