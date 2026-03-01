@@ -86,7 +86,7 @@ namespace GAMEDEV_ENGINE
         // to avoid direct instantiation
         GameObject() = default;
         
-    private:
+    protected:
         std::string _mName;
         GameObject* _mParent{nullptr};
         Scene* _mScene{ nullptr };

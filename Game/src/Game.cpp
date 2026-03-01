@@ -1,5 +1,6 @@
 
 #include "Game.h"
+#include "Player/Player.h"
 #include "Engine/Application.h"
 #include "Engine/graphics/GraphicsAPI.h"
 #include "Engine/render/RenderQueue.h"
@@ -26,12 +27,14 @@ bool Game::Init()
     // Tell Engine about the scene
     Engine::GetInstance().SetCurrentScene(_mScene);
     // create a camera
-    auto camera = _mScene->CreateGameObject("Camera");
-    camera->AddComponent(new CameraComponent());
-    camera->SetPosition(glm::vec3(0.0f, 0.0f, 2.0f));
-    camera->AddComponent(new PlayerControllerComponent());
+    //auto camera = _mScene->CreateGameObject("Camera");
+    //camera->AddComponent(new CameraComponent());
+    //camera->SetPosition(glm::vec3(0.0f, 0.0f, 2.0f));
+    //camera->AddComponent(new PlayerControllerComponent());
     // need to set main camera for the secene
-    _mScene->SetMainCameraGameObject(camera);
+    auto player = _mScene->CreateGameObject<Player>("Player");
+    player->Init();
+   _mScene->SetMainCameraGameObject(player);
     // if(!shaderProgram)  // If shader creation FAILED (nullptr)
     // {
     //     std::cerr << "Failed to create shader program" << std::endl;  // ✅ Error message
@@ -159,27 +162,27 @@ bool Game::Init()
     suzanneObj->SetPosition(glm::vec3(-5.0f, 0.0f, 0.0f));  // Move to the left
 
     // for the FPS
-    auto gunObj = GameObject::LoadGLTF("models/sten_gunmachine_carbine/scene.gltf");
-    // we will attach weapon as child object of the camera
-    gunObj->SetParent(camera);
-    gunObj->SetPosition(glm::vec3(0.75f, -0.5f, -0.75f));
-    gunObj->SetScale(glm::vec3(-1.0f, 1.0f, 1.0f));
+    //auto gunObj = GameObject::LoadGLTF("models/sten_gunmachine_carbine/scene.gltf");
+    //// we will attach weapon as child object of the camera
+    //gunObj->SetParent(camera);
+    //gunObj->SetPosition(glm::vec3(0.75f, -0.5f, -0.75f));
+    //gunObj->SetScale(glm::vec3(-1.0f, 1.0f, 1.0f));
 
-    if (auto anim = gunObj->GetComponent<AnimationComponent>())
-    {
-        if (auto bullet = gunObj->FindChildByName("bullet_33"))
-        {
-           bullet->SetActive(false);
-        }
+    //if (auto anim = gunObj->GetComponent<AnimationComponent>())
+    //{
+    //    if (auto bullet = gunObj->FindChildByName("bullet_33"))
+    //    {
+    //       bullet->SetActive(false);
+    //    }
 
-        if (auto fire = gunObj->FindChildByName("BOOM_35"))
-        {
-            fire->SetActive(false);
-        }
+    //    if (auto fire = gunObj->FindChildByName("BOOM_35"))
+    //    {
+    //        fire->SetActive(false);
+    //    }
  
-      anim->Play("shoot");
+    //  anim->Play("shoot");
 
-    }
+    //}
 
     // create a light objce
     auto lightObj = _mScene->CreateGameObject("Light");
@@ -210,7 +213,7 @@ bool Game::Init()
         BodyType::Dynamic, boxCollider, 5.0f, 0.5f);
     boxObj->AddComponent(new PhysicsComponent(boxBody));
 
-    camera->SetPosition(glm::vec3(0.0f, 1.0f, 7.0f));
+   //  player->SetPosition(glm::vec3(0.0f, 1.0f, 7.0f));
     std::cout << "Game Initialized" << std::endl;
     return true;
 }

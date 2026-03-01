@@ -58,6 +58,8 @@ namespace GAMEDEV_ENGINE
 		void RegisterClip(const std::string& name, const std::shared_ptr<AnimationClip>& clip);
 		void Play(const std::string& name, bool loop = true);
 
+		bool IsPlaying() const { return _mIsPlaying; }
+
 	private:
 		void BuildBindings();
 		glm::vec3 InterpolateV3(const std::vector<KeyFrameVec3>& keys, float time);

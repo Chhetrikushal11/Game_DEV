@@ -8,6 +8,11 @@
 
 namespace GAMEDEV_ENGINE
 {
+    void PlayerControllerComponent::Init()
+    {
+        // initialize
+        _mKinematicsController = std::make_unique<KinematicsCharacterController>(0.4f, 1.2f);
+    }
     void PlayerControllerComponent::Update(float deltaTime)
     {
         auto& inputManager = Engine::GetInstance().GetInputManager();
@@ -66,32 +71,46 @@ namespace GAMEDEV_ENGINE
         glm::vec3 front = rotation * glm::vec3(0.0f, 0.0f, -1.0f);
         glm::vec3 right = rotation * glm::vec3(1.0f, 0.0f, 0.0f);  // Right is +X
 
-        auto position = _mGameObjectOwner->GetPosition();
+        glm::vec3 move(0.0f);
 
         // ✅ Movement (use vec3 operations, not component assignment)
         if (inputManager.IskeyPressed(GLFW_KEY_A))
         {
-            position -= right * _mMoveSpeed * deltaTime;
+            move -= right;
         }
         else if (inputManager.IskeyPressed(GLFW_KEY_D))  // Uses else-if
         {
-            position += right * _mMoveSpeed * deltaTime;
+            move += right;
         }  
         
         if (inputManager.IskeyPressed(GLFW_KEY_W))
         {
-            position += front * _mMoveSpeed * deltaTime;  // Move forward
+            move += front;
         }
         else if (inputManager.IskeyPressed(GLFW_KEY_S))
         {
-            position -= front * _mMoveSpeed * deltaTime;  // Move backward
+            move -= front;
+        }
+
+        if (inputManager.IskeyPressed(GLFW_KEY_SPACE))
+        {
+            _mKinematicsController->Jump(glm::vec3(0.0f, 5.0f, 0.0f));
         }
 
         if (inputManager.IskeyPressed(GLFW_KEY_H))
         {
-            position = glm::vec3(0.0f, 0.0f, 0.0f);  // Reset to origin
+            _mGameObjectOwner->SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
         }
 
-        _mGameObjectOwner->SetPosition(position);
+
+        if (glm::dot(move, move) > 0)
+        {
+            move = glm::normalize(move);
+        }
+        
+        _mKinematicsController->Walk(move * _mMoveSpeed * deltaTime);
+
+        _mGameObjectOwner->SetPosition(_mKinematicsController->GetPosition());
+      
     }
 }
