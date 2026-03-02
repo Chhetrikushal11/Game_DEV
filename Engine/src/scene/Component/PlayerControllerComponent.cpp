@@ -43,12 +43,12 @@ namespace GAMEDEV_ENGINE
             // Rotation around X axis (pitch)
            // rotation.x -= deltaY * _mSensitivity /** deltaTime*/;
            // for global y
-            float yAngle = -deltaX * _mSensitivity * deltaTime;
+            float yAngle = -deltaX * _mSensitivity;
             // converting it to quaterion
             glm::quat yRot = glm::angleAxis(yAngle, glm::vec3(0.0f, 1.0f, 0.0f));
 
             // Pitch — clamp accumulated total
-            _mXRot += -deltaY * _mSensitivity * deltaTime;
+            _mXRot += -deltaY * _mSensitivity;
             _mXRot = std::clamp(_mXRot, glm::radians(-80.0f), glm::radians(89.0f));
 
             // vertical rotation around local x -axis

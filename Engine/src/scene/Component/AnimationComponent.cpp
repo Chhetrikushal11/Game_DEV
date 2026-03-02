@@ -108,10 +108,7 @@ namespace GAMEDEV_ENGINE
 	void AnimationComponent::BuildBindings()
 	{
 		_mBindings.clear();
-		if (!_mClip)
-		{
-			return;
-		}
+		if (!_mClip) return;
 
 		for (size_t i = 0; i < _mClip->tracks.size(); ++i)
 		{
@@ -123,18 +120,16 @@ namespace GAMEDEV_ENGINE
 				auto it = _mBindings.find(targetObject);
 				if (it != _mBindings.end())
 				{
-					auto it = _mBindings.find(targetObject);
-					if (it != _mBindings.end())
-					{
-						it->second->trackIndices.push_back(i);
-					}
-					else
-					{
-						auto binding = std::make_unique<ObjectBinding>();
-						binding->object = targetObject;
-						binding->trackIndices.push_back(i);
-						_mBindings.emplace(targetObject, std::move(binding));
-					}
+					// Already exists — just add the index
+					it->second->trackIndices.push_back(i);
+				}
+				else
+				{
+					// New object — create binding
+					auto binding = std::make_unique<ObjectBinding>();
+					binding->object = targetObject;
+					binding->trackIndices.push_back(i);
+					_mBindings.emplace(targetObject, std::move(binding));
 				}
 			}
 		}

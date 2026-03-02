@@ -297,10 +297,15 @@ void Engine::Run()
 
     void Engine::mouseCursorCallback(GLFWwindow* window, double xPos, double yPos)
     {
-        _mInputManager.SetMousePositionOld(_mInputManager.GetMousePositionCurrent());
         glm::vec2 currentPos(static_cast<float>(xPos), static_cast<float>(yPos));
-        _mInputManager.SetMousePositionCurrent(currentPos);
-        _mInputManager.SetMousePositionChanged(true);
+        glm::vec2 oldPos = _mInputManager.GetMousePositionCurrent();
+
+        if (currentPos.x != oldPos.x || currentPos.y != oldPos.y)
+        {
+            _mInputManager.SetMousePositionOld(oldPos);
+            _mInputManager.SetMousePositionCurrent(currentPos);
+            _mInputManager.SetMousePositionChanged(true);
+        }
     }
     // =================================================
     // MouseCursorPosition

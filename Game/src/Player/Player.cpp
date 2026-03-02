@@ -16,20 +16,15 @@ namespace GAMEDEV_ENGINE
         gunObj->SetPosition(glm::vec3(0.75f, -0.5f, -0.75f));
         gunObj->SetScale(glm::vec3(-1.0f, 1.0f, 1.0f));
 
+        // In Init() — don't play on startup, just register
         if (auto anim = gunObj->GetComponent<AnimationComponent>())
         {
+            // hide bullet and fire effects
             if (auto bullet = gunObj->FindChildByName("bullet_33"))
-            {
                 bullet->SetActive(false);
-            }
-
             if (auto fire = gunObj->FindChildByName("BOOM_35"))
-            {
                 fire->SetActive(false);
-            }
-
-            anim->Play("shoot");
-
+            // Don't call anim->Play() here — let mouse click trigger it
         }
         _mAnimationComponent = gunObj->GetComponent<AnimationComponent>();
        
