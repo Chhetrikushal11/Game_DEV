@@ -36,7 +36,7 @@ namespace GAMEDEV_ENGINE
 		if (numChannels == 4)
 		{
 			GLint internalFormat = GL_RGBA;
-			GLenum format = GL_RGBA;
+			format = GL_RGBA;
 		}
 
 		// now to load data in GPU

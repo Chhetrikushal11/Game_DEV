@@ -60,7 +60,7 @@ namespace GAMEDEV_ENGINE
 
 				}
 
-				if (!track.rotations.empty())
+				if (!track.scales.empty())
 				{
 					auto scale = InterpolateV3(track.scales, _mTime);
 					obj->SetScale(scale);
@@ -152,7 +152,7 @@ namespace GAMEDEV_ENGINE
 			return keys.front().value;
 		}
 
-		if (time <= keys.back().time)
+		if (time >= keys.back().time)
 		{
 			return keys.back().value;
 		}
