@@ -14,8 +14,13 @@
 
  namespace GAMEDEV_ENGINE 
  {
-bool Game::Init()
+     void Game::RegisterTypes()
+     {
+         Player::Register();
+     }
+     bool Game::Init()
 {   // to access the file system
+#if 0
     auto& afs = Engine::GetInstance().GetAssetFileSystem();
   
     auto texture= Texture::Load("textures/brick.png");
@@ -215,6 +220,10 @@ bool Game::Init()
 
    //  player->SetPosition(glm::vec3(0.0f, 1.0f, 7.0f));
     std::cout << "Game Initialized" << std::endl;
+#endif
+    auto scene = Scene::Load("scenes/scene1.sc");
+    _mScene = scene;
+    Engine::GetInstance().SetCurrentScene(scene.get());
     return true;
 }
 

@@ -10,6 +10,8 @@ namespace GAMEDEV_ENGINE
 	COMPONENT(LightComponent)
 	public:
 		void Update(float deltaTime) override;
+		//----------------------- LoadProperties --------------------
+		void LoadProperties(const nlohmann::json& json) override;
 		// lets create a setter and getter for the color
 		
 		// ------------------ Setter --------------------------------

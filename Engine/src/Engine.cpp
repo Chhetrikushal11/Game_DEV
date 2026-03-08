@@ -66,6 +66,9 @@ bool Engine::Init(int width, int height, const char* title)
         std::cerr << "No application set!" << std::endl;
         return false;
     }
+    Scene::RegisterTypes();
+    _mApplication->RegisterTypes();
+
 
     if (!glfwInit()) {
         std::cerr << "GLFW Init failed!" << std::endl;

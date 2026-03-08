@@ -13,11 +13,12 @@ namespace GAMEDEV_ENGINE
    {
         //
     public:
+        void RegisterTypes() override;
         bool Init() override;
         void Update(float deltaTime) override;
         void Destroy() override;
     private:
-        Scene* _mScene = nullptr;
+      std::shared_ptr<Scene> _mScene ;
  
     }; 
 }

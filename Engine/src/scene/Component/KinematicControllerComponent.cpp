@@ -8,7 +8,7 @@
 
 namespace GAMEDEV_ENGINE
 {
-	KinematicsCharacterController::KinematicsCharacterController(float radius, float height)
+	KinematicsCharacterController::KinematicsCharacterController(float radius, float height, const glm::vec3 position)
 		: _mRadius{ radius },
 		_mHeight{ height }
 	{
@@ -21,7 +21,7 @@ namespace GAMEDEV_ENGINE
 		_mGhost = std::make_unique<btPairCachingGhostObject>();
 		btTransform start;
 		start.setIdentity();
-		start.setOrigin(btVector3(0.0f, 2.0f, 0.0f));
+		start.setOrigin(btVector3(position.x, position.y, position.z));
 		_mGhost->setWorldTransform(start);
 		_mGhost->setCollisionShape(_mCapsule);
 		_mGhost->setCollisionFlags(

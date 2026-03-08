@@ -5,6 +5,9 @@
 #include <string>
 #include <vector>
 #include <memory>
+
+#include <nlohmann/json.hpp>
+
 #include "Engine/scene/Component.h"
 
 namespace GAMEDEV_ENGINE
@@ -15,6 +18,8 @@ namespace GAMEDEV_ENGINE
     public:
         // we we pass destrcutor as virtual 
         virtual ~GameObject() = default;
+        virtual void Init();
+        virtual void LoadProperties(const nlohmann::json& json);
         // to prevent direct instantiation
         // virtal destructor to allow proper cleanup in derived classes
         // virutal destructor is important in base classes to ensure derived class destructors are called correctly
@@ -54,7 +59,14 @@ namespace GAMEDEV_ENGINE
         void AddComponent(Component* component);
 
         // for loading GLTF
-        static GameObject* LoadGLTF(const std::string& path);
+        static GameObject* LoadGLTF(const std::string& path, Scene* gameScene);
+
+        //------------------------- for world position -----------------------------------
+
+        void SetWorldPosition(const glm::vec3& pos);
+        glm::vec3 GetWorldPosition1() const;
+        void SetWorldRotation(const glm::quat& rot);
+        glm::quat GetWorldRotation() const;
 
         
         // for isActive
@@ -103,7 +115,43 @@ namespace GAMEDEV_ENGINE
         // declaring scene as friend class to access private members
         friend class Scene;
     };
+    
+    // creating a factory for object
+    class ObjectCreatorBase
+    {
+    public:
+        virtual ~ObjectCreatorBase() = default;
+        virtual GameObject* CreateGameObject() = 0;
 
+    };
 
+    template<typename T>
+    class ObjectCreator : public ObjectCreatorBase
+    {
+    public:
+        virtual GameObject* CreateGameObject() override
+        {
+            return new T();
+        }
+    };
+
+    class GameObjectFactory
+    {
+    public:
+        static GameObjectFactory& GetInstance();
+        template<typename T>
+        void RegisterObject(const std::string& name)
+        {
+            _mCreators.emplace(name, std::make_unique<ObjectCreator<T>>());
+        }
+
+        GameObject* CreateGameObject(const std::string& typeName);
+    private:
+        std::unordered_map<std::string, std::unique_ptr<ObjectCreatorBase>> _mCreators;
+    };
+
+#define GAMEOBJECT(ObjectClass)\
+public: \
+    static void Register() {GAMEDEV_ENGINE::GameObjectFactory::GetInstance().RegisterObject<ObjectClass>(std::string(#ObjectClass)); }
 
 } // namespace GAMEDEV_ENGINE

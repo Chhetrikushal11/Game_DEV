@@ -20,6 +20,16 @@
 
 namespace GAMEDEV_ENGINE
 {
+    void GameObject::Init()
+    {
+
+
+    }
+
+    void GameObject::LoadProperties(const nlohmann::json& json)
+    {
+
+    }
     void GameObject::Update(float deltaTime)
     {
         if (!_mActive)
@@ -415,13 +425,18 @@ namespace GAMEDEV_ENGINE
             }
         };
     
-    GameObject* GameObject::LoadGLTF(const std::string& path)
+    GameObject* GameObject::LoadGLTF(const std::string& path, Scene* gameScene)
     {
         // we will follow same procedure we follow in mesh load
         // step 1 :Read the file content
          // we can load file using GetInstance()
         auto contents = Engine::GetInstance().GetAssetFileSystem().LoadAssetFileText(path);
         if (contents.empty())
+        {
+            return nullptr;
+        }
+
+        if (!gameScene)
         {
             return nullptr;
         }
@@ -446,7 +461,7 @@ namespace GAMEDEV_ENGINE
 
         // gltf store file data as node
             // a gltf can have more than one nodes so we need one root gameobject to hold everything
-        auto resultObject = Engine::GetInstance().GetCurrentScene()->CreateGameObject("Result");
+        auto resultObject = gameScene->CreateGameObject("Result");
         auto scene = &data->scenes[0]; // to use it as pointer
        
         for (cgltf_size i = 0; i < scene->nodes_count; ++i)
@@ -577,6 +592,60 @@ namespace GAMEDEV_ENGINE
         return resultObject;
     }
 
+    void GameObject::SetWorldPosition(const glm::vec3& pos)
+    {
+        if (_mParent)
+        {
+            glm::mat4 parentWorld = _mParent->GetWorldTransformMatrix();
+            glm::mat4 invParentWorld = glm::inverse(parentWorld);
+            glm::vec4 localPos = invParentWorld * glm::vec4(pos, 1.0f);
+            SetPosition(glm::vec3(localPos) / localPos.w);
+        }
+        else
+        {
+            SetPosition(pos);
+        }
+    }
+
+    glm::vec3 GameObject::GetWorldPosition1() const
+    {
+        if (_mParent)
+        {
+            return _mParent->GetWorldPosition1() * _mPosition;
+        }
+        else
+        {
+            return _mPosition;
+        }
+    }
+
+    void GameObject::SetWorldRotation(const glm::quat& rot)
+    {
+        if (_mParent)
+        {
+            glm::quat parentWorldRot = _mParent->GetWorldRotation();
+            glm::quat invParentWorldRot = glm::inverse(parentWorldRot);
+            glm::quat newLocalRot = invParentWorldRot * rot;
+            SetRotation(newLocalRot);
+        }
+        else
+        {
+            SetRotation(rot);
+        }
+    }
+
+    glm::quat GameObject::GetWorldRotation() const
+    {
+        if (_mParent)
+        {
+            return _mParent->GetWorldRotation() * _mRotation;
+        }
+        else
+        {
+            return _mRotation;
+        }
+    }
+
     void GameObject::SetActive(bool active)
     {
         _mActive = active;
@@ -600,4 +669,20 @@ namespace GAMEDEV_ENGINE
         return nullptr;
     }
 
+    GameObjectFactory& GameObjectFactory::GetInstance()
+    {
+        static GameObjectFactory instance;
+        return instance;
+    }
+
+    GameObject* GameObjectFactory::CreateGameObject(const std::string& typeName)
+    {
+        auto it = _mCreators.find(typeName);
+        if (it == _mCreators.end())
+        {
+            return nullptr;
+        }
+
+        return it->second->CreateGameObject();
+    }
 } // namespace GAMEDEV_ENGINE   

@@ -7,7 +7,7 @@ namespace GAMEDEV_ENGINE
     public:
         Application();
         virtual ~Application();
-        
+        virtual void RegisterTypes();
         virtual bool Init() = 0;
         virtual void Update(float deltaTime) = 0;
         virtual void Destroy() = 0;

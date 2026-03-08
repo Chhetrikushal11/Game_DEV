@@ -13,6 +13,10 @@ namespace GAMEDEV_ENGINE
         std::cout << "Application destroyed" << std::endl;
     }
 
+    void Application::RegisterTypes()
+    {
+    }
+
     void Application::SetNeedsToClosed(bool needsToClose)
     {
         _mNeedsToClose = needsToClose;

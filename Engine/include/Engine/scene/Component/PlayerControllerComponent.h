@@ -16,8 +16,8 @@ namespace GAMEDEV_ENGINE
 	
 	private:
 		// to capture mouse sensitivity and mouse speed
-		float _mSensitivity = 1.0f; // how quickly we turn when we turn the mouse
-		float _mMoveSpeed = 2.0f; // how fast we move when pressing keys
+		float _mSensitivity = .15f; // how quickly we turn when we turn the mouse
+		float _mMoveSpeed = 20.0f; // how fast we move when pressing keys
 		float _mXRot = 0.0f;
 		float _mYRot = 0.0f;
 		bool _mCursorLocked = true;

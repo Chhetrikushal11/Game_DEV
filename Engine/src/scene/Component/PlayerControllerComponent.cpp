@@ -10,8 +10,9 @@ namespace GAMEDEV_ENGINE
 {
     void PlayerControllerComponent::Init()
     {
-        // initialize
-        _mKinematicsController = std::make_unique<KinematicsCharacterController>(0.4f, 1.2f);
+        std::cout << "PlayerController Init start" << std::endl;
+        _mKinematicsController = std::make_unique<KinematicsCharacterController>(0.4f, 1.2f, _mGameObjectOwner->GetWorldPosition());
+        std::cout << "PlayerController Init done" << std::endl;
     }
     void PlayerControllerComponent::Update(float deltaTime)
     {

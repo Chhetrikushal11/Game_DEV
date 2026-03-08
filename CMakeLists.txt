@@ -65,8 +65,9 @@ add_library(stb INTERFACE)
 target_include_directories(stb INTERFACE external/stb)
 
 # Add JSON
+# With this:
 add_library(json INTERFACE)
-target_include_directories(json INTERFACE external/json)
+target_include_directories(json INTERFACE ${CMAKE_SOURCE_DIR}/external/json)
 
 # Add cgltf (fixed typo - was targeting json twice)
 add_library(cgltf INTERFACE)

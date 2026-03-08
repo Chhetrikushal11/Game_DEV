@@ -14,7 +14,7 @@ namespace GAMEDEV_ENGINE
 	class KinematicsCharacterController
 	{
 	public:
-		KinematicsCharacterController(float radius, float height);
+		KinematicsCharacterController(float radius, float height, const glm::vec3 position);
 		~KinematicsCharacterController();
 
 		glm::vec3 GetPosition() const;

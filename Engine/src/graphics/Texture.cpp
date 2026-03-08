@@ -35,7 +35,7 @@ namespace GAMEDEV_ENGINE
 
 		if (numChannels == 4)
 		{
-			GLint internalFormat = GL_RGBA;
+			internalFormat = GL_RGBA;
 			format = GL_RGBA;
 		}
 
