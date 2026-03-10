@@ -10,6 +10,8 @@
 #include "Engine/scene/Component/PhysicsComponent.h"
 #include "Engine/Physics/RigidBody.h"
 #include "TestObject.h"
+#include "JumpPlatform.h"
+#include "Bullet.h"
 
 
  namespace GAMEDEV_ENGINE 
@@ -17,6 +19,8 @@
      void Game::RegisterTypes()
      {
          Player::Register();
+         Bullet::Register();
+         JumpPlatform::Register();
      }
      bool Game::Init()
 {   // to access the file system

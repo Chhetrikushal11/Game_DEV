@@ -3,6 +3,7 @@
 #include <glm/gtc/quaternion.hpp>
 #include <memory>
 #include "Engine/Physics/Collider.h"
+#include "Engine/Physics/CollisionObject.h"
 #include <btBulletDynamicsCommon.h>
 
 
@@ -17,7 +18,7 @@ namespace GAMEDEV_ENGINE
 		Kinematic,
 	};
 
-	class RigidBody
+	class RigidBody : public CollisionObject
 	{
 		public:
 			RigidBody(BodyType type, const std::shared_ptr<Collider>& collider, float mass, float friction);

@@ -5,13 +5,15 @@
 #include <memory>
 #include <btBulletDynamicsCommon.h>
 
+#include "Engine/Physics/CollisionObject.h"
+
 class btPairCachingGhostObject;
 class btKinematicCharacterController;
 class btGhostPairCallback;
 
 namespace GAMEDEV_ENGINE
 {
-	class KinematicsCharacterController
+	class KinematicsCharacterController : public CollisionObject
 	{
 	public:
 		KinematicsCharacterController(float radius, float height, const glm::vec3 position);

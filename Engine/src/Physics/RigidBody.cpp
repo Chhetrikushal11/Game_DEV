@@ -15,6 +15,7 @@ namespace GAMEDEV_ENGINE
 		{
 			return;
 		}
+		_mType = CollisionObjectType::RigidBody;
 
 		btVector3 inertia(0, 0, 0);
 		if (_mBodyType == BodyType::Dynamic && mass > 0.0f && _mBodyCollider->GetShape())
@@ -36,6 +37,7 @@ namespace GAMEDEV_ENGINE
 
 		_mRigidBody = std::make_unique<btRigidBody>(info);
 		_mRigidBody->setFriction(friction);
+		_mRigidBody->setUserPointer(this);
 
 		if (_mBodyType == BodyType::Kinematic)
 		{

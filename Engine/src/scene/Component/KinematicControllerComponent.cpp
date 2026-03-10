@@ -6,12 +6,15 @@
 #include "Engine/scene/Component/KinematicControllerComponent.h"
 
 
+
 namespace GAMEDEV_ENGINE
 {
 	KinematicsCharacterController::KinematicsCharacterController(float radius, float height, const glm::vec3 position)
 		: _mRadius{ radius },
 		_mHeight{ height }
 	{
+		// collision object type
+		_mType = CollisionObjectType::KinematicCharacterController;
 		auto world = Engine::GetInstance().GetPhysicsManager().GetWorld();
 
 		// 1. Create shape first
@@ -26,6 +29,7 @@ namespace GAMEDEV_ENGINE
 		_mGhost->setCollisionShape(_mCapsule);
 		_mGhost->setCollisionFlags(
 			_mGhost->getCollisionFlags() | btCollisionObject::CF_CHARACTER_OBJECT);
+		_mGhost->setUserPointer(this);
 
 		// 3. Assign to MEMBER not local variable
 		_mGhostPairCallback = new btGhostPairCallback();

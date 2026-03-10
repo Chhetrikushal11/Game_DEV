@@ -25,5 +25,6 @@
 #include "Engine/scene/Component/AnimationComponent.h"
 #include "Engine/scene/Component/AudioComponent.h"
 #include "Engine/scene/Component/AudioListenerComponent.h"
+#include "Engine/scene/Component/PhysicsComponent.h"
 #include "Engine/Physics/PhysicsManager.h"
 #include "io/AssetFileSystem.h"
