@@ -114,4 +114,14 @@ namespace GAMEDEV_ENGINE
         _mGameObjectOwner->SetPosition(_mKinematicsController->GetPosition());
       
     }
+
+    bool PlayerControllerComponent::OnGround() const
+    {
+        if (_mKinematicsController)
+        {
+            return _mKinematicsController->OnGround();
+        }
+
+        return false;
+    }
 }

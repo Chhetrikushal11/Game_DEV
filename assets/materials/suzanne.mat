@@ -8,7 +8,7 @@
 		"texture": [
 			{
 				"name": "baseColorTexture",
-				"path": "models/Suzanne_BaseColor.png"
+				"path": "models/Suzanne/Suzanne_BaseColor.png"
 			}
 		]
 	}

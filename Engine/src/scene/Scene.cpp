@@ -2,19 +2,21 @@
 #include "Engine/scene/Scene.h"
 
 #include "Engine/scene/Component/AnimationComponent.h"
+#include "Engine/scene/Component/AudioComponent.h"
+#include "Engine/scene/Component/AudioListenerComponent.h"
 #include "Engine/scene/Component/CameraComponent.h"
 #include "Engine/scene/Component/LightComponent.h"
 #include "Engine/scene/Component/MeshComponent.h"
 #include "Engine/scene/Component/PhysicsComponent.h"
 #include "Engine/scene/Component/PlayerControllerComponent.h"
 
-
-
 namespace GAMEDEV_ENGINE
 {
     void Scene::RegisterTypes()
     {
         AnimationComponent::Register();
+        AudioComponent::Register();
+        AudioListenerComponent::Register();
         CameraComponent::Register();
         LightComponent::Register();
         MeshComponent::Register();
@@ -24,19 +26,35 @@ namespace GAMEDEV_ENGINE
 
     void Scene::Update(float deltaTime)
     {
+        _mIsUpdating = true;
         for (auto objectIt = _mRootGameObjects.begin(); objectIt != _mRootGameObjects.end(); )
         {
             GameObject* object = objectIt->get();
             if (object->IsAlive())
             {
+                printf("Updating: %s\n", object->GetName().c_str());
+                fflush(stdout);
                 object->Update(deltaTime);
                 ++objectIt;
             }
             else
             {
+                printf("Destroying: %s\n", object->GetName().c_str());
+                fflush(stdout);
                 objectIt = _mRootGameObjects.erase(objectIt);
             }
         }
+        _mIsUpdating = false;
+
+        // flush deferred additions
+        for (auto& [obj, parent] : _mRootGameObjectsToAdd)
+        {
+            printf("Flushing deferred: %s\n", obj->GetName().c_str());
+            fflush(stdout);
+            _mRootGameObjects.emplace_back(obj);
+            SetParent(obj, parent);
+        }
+        _mRootGameObjectsToAdd.clear();
     }
 
     void Scene::Clear()
@@ -46,14 +64,19 @@ namespace GAMEDEV_ENGINE
 
     GameObject* Scene::CreateGameObject(const std::string& name, GameObject* parent)
     {
-        // Create the object and immediately take ownership in root list
         auto gameObject = new GameObject();
-        _mRootGameObjects.emplace_back(gameObject);
         gameObject->SetName(name);
         gameObject->_mScene = this;
 
-        // SetParent will move it out of root into parent->_mChildren if parent != nullptr
-        SetParent(gameObject, parent);
+        if (_mIsUpdating)
+        {
+            _mRootGameObjectsToAdd.push_back({ gameObject, parent });
+        }
+        else
+        {
+            _mRootGameObjects.emplace_back(gameObject);
+            SetParent(gameObject, parent);
+        }
         return gameObject;
     }
 
@@ -62,12 +85,18 @@ namespace GAMEDEV_ENGINE
         auto gameObject = GameObjectFactory::GetInstance().CreateGameObject(type);
         if (gameObject)
         {
-            // NOTE: factory-created objects are raw new — not yet owned by anyone
-            // Put into root first so SetParent can move it correctly
-            _mRootGameObjects.emplace_back(gameObject);
             gameObject->SetName(name);
             gameObject->_mScene = this;
-            SetParent(gameObject, parent);
+
+            if (_mIsUpdating)
+            {
+                _mRootGameObjectsToAdd.push_back({ gameObject, parent });
+            }
+            else
+            {
+                _mRootGameObjects.emplace_back(gameObject);
+                SetParent(gameObject, parent);
+            }
         }
         return gameObject;
     }
@@ -244,6 +273,13 @@ namespace GAMEDEV_ENGINE
             std::string cameraObjName = jsonContent.value("camera", "");
             for (const auto& child : result->_mRootGameObjects)
             {
+                // check root object itself first
+                if (child->GetName() == cameraObjName)
+                {
+                    result->SetMainCameraGameObject(child.get());
+                    break;
+                }
+                // then search children
                 if (auto object = child->FindChildByName(cameraObjName))
                 {
                     result->SetMainCameraGameObject(object);
@@ -270,8 +306,6 @@ namespace GAMEDEV_ENGINE
                 if (gameObject)
                 {
                     gameObject->SetName(name);
-                    // LoadGLTF already added resultObject to root via CreateGameObject
-                    // SetParent will move it from root into parent->_mChildren
                     if (parent)
                     {
                         gameObject->SetParent(parent);
@@ -312,7 +346,7 @@ namespace GAMEDEV_ENGINE
             rot.x = rotObj.value("x", 0.0f);
             rot.y = rotObj.value("y", 0.0f);
             rot.z = rotObj.value("z", 0.0f);
-            rot.w = rotObj.value("w", 1.0f);  // identity default
+            rot.w = rotObj.value("w", 1.0f);
             gameObject->SetRotation(rot);
         }
 
@@ -358,9 +392,8 @@ namespace GAMEDEV_ENGINE
             }
         }
 
-        // ── Init — called after hierarchy and components are fully built ─────────
+        // ── Init ─────────────────────────────────────────────────────────────────
 
         gameObject->Init();
     }
-
 }

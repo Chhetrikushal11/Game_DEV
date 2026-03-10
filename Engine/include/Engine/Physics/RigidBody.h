@@ -1,9 +1,9 @@
 #pragma once
 #include <glm/vec3.hpp>
 #include <glm/gtc/quaternion.hpp>
-
-#include<memory>
+#include <memory>
 #include "Engine/Physics/Collider.h"
+#include <btBulletDynamicsCommon.h>
 
 
 class btRigidBody;
@@ -32,6 +32,10 @@ namespace GAMEDEV_ENGINE
 			glm::vec3 GetBodyPosition() const;
 			void SetBodyRotation(const glm::quat& rot);
 			glm::quat GetBodyRotation()const;
+
+			// to make bullet fly
+			void ApplyImpulse(const glm::vec3& impulse);
+
 	private:
 		std::unique_ptr<btRigidBody> _mRigidBody;
 		BodyType _mBodyType = BodyType::Static;
@@ -39,5 +43,6 @@ namespace GAMEDEV_ENGINE
 		float _mBodyMass = 0.0f;
 		float _mBodyFriction = 0.5f;
 		bool _mAddedToWorld = false;
+		std::unique_ptr<btDefaultMotionState> _mMotionState = nullptr;
 	};
 }

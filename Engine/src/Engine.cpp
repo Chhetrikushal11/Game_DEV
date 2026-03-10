@@ -129,6 +129,9 @@ bool Engine::Init(int width, int height, const char* title)
     _sGraphicsAPI->Init();
     // call the Physics Manager .init
     _mPhyicsManager.Init();
+
+    // to call Audio Manager 
+    _mAudioManager.Init();
     return _mApplication->Init();
 
   

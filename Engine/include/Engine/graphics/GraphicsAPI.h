@@ -47,6 +47,8 @@ namespace GAMEDEV_ENGINE
 
     // here we add bind mesh
     void BindMesh(Mesh* mesh);
+    // here we add the unbind mesh
+    void UnbindMesh(Mesh* mesh);
     // here we add draw mesh
     void DrawMesh(Mesh* mesh);
     

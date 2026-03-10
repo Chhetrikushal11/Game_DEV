@@ -9,6 +9,15 @@ namespace GAMEDEV_ENGINE
 	{
 	}
 
+	PhysicsComponent::~PhysicsComponent()
+	{
+		if (_mComponentRigidBody && _mAddedToWorld)
+		{
+			Engine::GetInstance().GetPhysicsManager().RemoveRigidBody(_mComponentRigidBody.get());
+			_mAddedToWorld = false;
+		}
+	}
+
 	void PhysicsComponent::LoadProperties(const nlohmann::json& json)
 	{
 		std::shared_ptr<Collider> collider;
@@ -76,21 +85,18 @@ namespace GAMEDEV_ENGINE
 
 	}
 
+
 	void PhysicsComponent::Init()
 	{
-		if (!_mComponentRigidBody)
-		{
+		if (!_mComponentRigidBody || _mAddedToWorld)
 			return;
-		}
 
 		const auto pos = _mGameObjectOwner->GetWorldPosition1();
 		const auto rot = _mGameObjectOwner->GetWorldRotation();
-
 		_mComponentRigidBody->SetBodyPosition(pos);
 		_mComponentRigidBody->SetBodyRotation(rot);
-
 		Engine::GetInstance().GetPhysicsManager().AddRigidBody(_mComponentRigidBody.get());
-
+		_mAddedToWorld = true;
 	}
 
 	void PhysicsComponent::Update(float deltaTime)

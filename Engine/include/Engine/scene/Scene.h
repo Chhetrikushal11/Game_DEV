@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <stdio.h>
 #include <vector>
 #include <memory>
@@ -26,18 +26,44 @@ namespace GAMEDEV_ENGINE
         GameObject* CreateGameObject(const std::string& type, const std::string& name, GameObject* parent = nullptr);
 
         // templated method to create game object of derived types
+        //template<typename T, typename = std::enable_if_t<std::is_base_of<GameObject, T>::value>>
+        //T* CreateGameObject(const std::string& name, GameObject* parent = nullptr)
+        //{
+        //    auto gameObject = new T();
+        //    _mRootGameObjects.emplace_back(gameObject);
+        //    gameObject->SetName(name);
+        //    gameObject->_mScene = this;
+
+        //    if (_mIsUpdating)
+        //    {
+        //        _mRootGameObjectsToAdd.push_back({ gameObject, parent }); // ← gameObject not obj
+        //    }
+        //    else
+        //    {
+        //        SetParent(gameObject, parent);
+        //    }
+
+        //    return gameObject;
+        //}
+
         template<typename T, typename = std::enable_if_t<std::is_base_of<GameObject, T>::value>>
         T* CreateGameObject(const std::string& name, GameObject* parent = nullptr)
         {
-        auto gameObject = new T(); // create a new GameObject
-        _mRootGameObjects.emplace_back(gameObject); // store it in the root game objects
-        gameObject->SetName(name);
-       // gameObject->SetParent(gameObject, parent);
-        gameObject->_mScene = this;
-        gameObject->SetParent(parent);
-        
-        return gameObject;
+            auto gameObject = new T();
+            gameObject->SetName(name);
+            gameObject->_mScene = this;
 
+            if (_mIsUpdating)
+            {
+                _mRootGameObjectsToAdd.push_back({ gameObject, parent });
+            }
+            else
+            {
+                _mRootGameObjects.emplace_back(gameObject);
+                SetParent(gameObject, parent);
+            }
+
+            return gameObject;
         }
         
         // method to set parent of a game object
@@ -60,8 +86,10 @@ namespace GAMEDEV_ENGINE
         private:
     
             std::vector<std::unique_ptr<GameObject>> _mRootGameObjects;
+            std::vector<std::pair<GameObject*, GameObject*>> _mRootGameObjectsToAdd;
             // creating a member for camera game object
             GameObject* _mMainCameraGameObject{nullptr};
+            bool _mIsUpdating = false;
     };
 
 } // namespace GAMEDEV_ENGINE

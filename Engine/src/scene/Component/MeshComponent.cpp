@@ -18,27 +18,64 @@ namespace GAMEDEV_ENGINE
         // ── Material ─────────────────────────────────────────────────────────────
         if (json.contains("material"))
         {
-            std::string matPath;
-
-            // Format 1: "material": "materials/brick.mat"
-            if (json["material"].is_string())
+            auto& matObj = json["material"];
+            const std::string path = matObj.value("path", "");
+            auto mat = Material::Load(path);
+            if (mat && matObj.contains("params"))
             {
-                matPath = json["material"].get<std::string>();
-            }
-            // Format 2: "material": { "path": "materials/brick.mat" }
-            else if (json["material"].is_object() && json["material"].contains("path"))
-            {
-                matPath = json["material"]["path"].get<std::string>();
-            }
-
-            if (!matPath.empty())
-            {
-                auto material = Material::Load(matPath);
-                if (material)
+                auto& paramsObj = matObj["params"];
+                // for floats
+                if (paramsObj.contains("float"))
                 {
-                    SetMaterial(material);
+                    for (auto& p : paramsObj["float"])
+                    {
+                        std::string name = p.value("name", "");
+                        float value = p.value("value", 0.0f);
+                        mat->SetFloatParams(name, value);
+                    }
+                }
+                // for 2 params
+                if (paramsObj.contains("float2"))
+                {
+                    for (auto& p : paramsObj["float2"])
+                    {
+                        std::string name = p.value("name", "");
+                        float v0 = p.value("value0", 0.0f);
+                        float v1 = p.value("value1", 0.0f);
+                        mat->SetFloatParams2f(name, v0, v1);
+                    }
+                }
+
+                // for 3 params
+                if (paramsObj.contains("float3"))
+                {
+                    for (auto& p : paramsObj["float3"])
+                    {
+                        std::string name = p.value("name", "");
+                        float v0 = p.value("value0", 0.0f);
+                        float v1 = p.value("value1", 0.0f);
+                        float v2 = p.value("value2", 0.0f);
+                        mat->SetFloatParams3f(name, glm::vec3(v0, v1, v2));
+                    }
+                }
+
+                // for texture
+                           // for 2 params
+                if (paramsObj.contains("texture"))
+                {
+                    for (auto& p : paramsObj["texture"])
+                    {
+                        std::string name = p.value("name", "");
+                        std::string texturePath = p.value("path", "");
+                        auto texture = Texture::Load(texturePath);
+                        mat->SetTextureParams(name, texture);
+                    }
+
                 }
             }
+            std::string matPath;
+            SetMaterial(mat);
+
         }
 
         // ── Mesh ─────────────────────────────────────────────────────────────────

@@ -40,16 +40,23 @@ namespace GAMEDEV_ENGINE
 		const int maxSubSteps = 4;
 		_mPhysicsWorld->stepSimulation(deltaTime, maxSubSteps, fixedTimeStep);
 	}
+
 	void PhysicsManager::AddRigidBody(RigidBody* body)
 	{
-		if (!body || !_mPhysicsWorld)
-		{
-			return;
-		}
-
+		if (!body || !_mPhysicsWorld) return;
 		if (auto rigidBody = body->GetBody())
 		{
-			_mPhysicsWorld->addRigidBody(rigidBody, btBroadphaseProxy::StaticFilter, btBroadphaseProxy::AllFilter);
+			if (body->GetBodyType() == BodyType::Static)
+			{
+				_mPhysicsWorld->addRigidBody(rigidBody,
+					btBroadphaseProxy::StaticFilter,
+					btBroadphaseProxy::AllFilter);
+			}
+			else
+			{
+				// Dynamic and Kinematic use default filters
+				_mPhysicsWorld->addRigidBody(rigidBody);
+			}
 			body->SetAddedToWorld(true);
 		}
 	}

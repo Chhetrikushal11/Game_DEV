@@ -32,6 +32,7 @@ target_link_libraries(Engine
     json
     cgltf
     BulletPhysics
+    miniaudio
 )
 
 # Windows-specific settings

@@ -23,6 +23,11 @@ namespace GAMEDEV_ENGINE
         _mFloat2Params[name] = {v0, v1};
     }
 
+    void Material::SetFloatParams3f(const std::string& name, const glm::vec3& value)
+    {
+        _mFloat3Params[name] = value;
+    }
+
     void GAMEDEV_ENGINE::Material::SetTextureParams(const std::string& name, const std::shared_ptr<Texture>& texture)
     {
         _mTextureContainers[name] = texture;
@@ -49,6 +54,11 @@ namespace GAMEDEV_ENGINE
           for (const auto& param : _mFloat2Params)
           {
             _mShaderProgram->SetUniform2f(param.first, param.second.first, param.second.second);
+          }
+
+          for (const auto& param : _mFloat3Params)
+          {
+              _mShaderProgram->SetUniform3f(param.first, param.second);
           }
 
           for (const auto& param : _mTextureContainers)
@@ -123,6 +133,19 @@ namespace GAMEDEV_ENGINE
                    float v0= p.value("value0", 0.0f);
                    float v1 = p.value("value1", 0.0f);
                    result->SetFloatParams2f(name,v0, v1);
+               }
+           }
+
+           // for 3 params
+           if (paramsObj.contains("float3"))
+           {
+               for (auto& p : paramsObj["float3"])
+               {
+                   std::string name = p.value("name", "");
+                   float v0 = p.value("value0", 0.0f);
+                   float v1 = p.value("value1", 0.0f);
+                   float v2 = p.value("value2", 0.0f);
+                   result->SetFloatParams3f(name, glm::vec3(v0, v1, v2));
                }
            }
 

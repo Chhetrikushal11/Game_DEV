@@ -28,10 +28,12 @@ namespace GAMEDEV_ENGINE
             {
                 auto& light = lights[0];
                 command.material->GetShaderProgram()->SetUniform_Lights("uLight.color", light.color);
-                command.material->GetShaderProgram()->SetUniform_Lights("uLight.position", light.position);
+                command.material->GetShaderProgram()->SetUniform_Lights("uLight.direction", glm::normalize(-light.position));
             }
             graphicsAPI.BindMesh(command.mesh);
             graphicsAPI.DrawMesh(command.mesh);
+            graphicsAPI.UnbindMesh(command.mesh);
+
 
             
         }

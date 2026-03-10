@@ -69,7 +69,19 @@ target_include_directories(stb INTERFACE external/stb)
 add_library(json INTERFACE)
 target_include_directories(json INTERFACE ${CMAKE_SOURCE_DIR}/external/json)
 
-# Add cgltf (fixed typo - was targeting json twice)
+# Add miniaudio
+add_library(miniaudio INTERFACE)
+target_include_directories(miniaudio INTERFACE ${CMAKE_SOURCE_DIR}/external/miniaudio)
+
+if(UNIX AND NOT APPLE)
+    target_link_libraries(miniaudio INTERFACE dl pthread m)
+endif()
+
+if(WIN32)
+    target_link_libraries(miniaudio INTERFACE winmm user32 ole32)
+endif()
+
+# Add cgltf 
 add_library(cgltf INTERFACE)
 target_include_directories(cgltf INTERFACE external/cgltf)
 

@@ -79,6 +79,11 @@ namespace GAMEDEV_ENGINE
         glBindVertexArray(_mVAO);
     }
 
+    void Mesh::Unbind()
+    {
+        glBindVertexArray(0); // after we render the a mesh we dont need to keep it active any more
+    }
+
     void Mesh::Draw()
     {
         if(_mIndexCount >0)
@@ -102,10 +107,10 @@ namespace GAMEDEV_ENGINE
             // Position (3)      Color (3)         UV (2)
 
             // FRONT FACE (indices 0-3)
-             half.x,  half.y,  half.z,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f, 0.0f, 0.0f, 1.0f, // 0: top-right
-             half.x, -half.y,  half.z,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, 0.0f, 0.0f, 1.0f,  // 1: bottom-right
+             half.x,  half.y,  half.z,  1.0f, 0.0f, 0.0f,  extents.x, extents.y, 0.0f, 0.0f, 1.0f, // 0: top-right
+             half.x, -half.y,  half.z,  0.0f, 1.0f, 0.0f, extents.x, 0.0f, 0.0f, 0.0f, 1.0f,  // 1: bottom-right
             -half.x, -half.y,  half.z,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f, 0.0f, 0.0f, 1.0f, // 2: bottom-left
-            -half.x,  half.y,  half.z,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,  0.0f, 0.0f, 1.0f, // 3: top-left
+            -half.x,  half.y,  half.z,  1.0f, 1.0f, 0.0f,  0.0f, extents.y,  0.0f, 0.0f, 1.0f, // 3: top-left
 
             // BACK FACE (indices 4-7)
              half.x,  half.y, -half.z,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f, -1.0f,  // 4: top-right
@@ -114,27 +119,27 @@ namespace GAMEDEV_ENGINE
             -half.x,  half.y, -half.z,  1.0f, 1.0f, 0.0f,  1.0f, 1.0f, 0.0f, 0.0f, -1.0f, // 7: top-left
 
             // RIGHT FACE (indices 8-11)
-             half.x,  half.y, -half.z,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f, 1.0f, 0.0f,  0.0f, // 8: top-back
-             half.x, -half.y, -half.z,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, 1.0f, 0.0f,  0.0f, // 9: bottom-back
+             half.x,  half.y, -half.z,  1.0f, 0.0f, 0.0f,  extents.z, extents.y, 1.0f, 0.0f,  0.0f, // 8: top-back
+             half.x, -half.y, -half.z,  0.0f, 1.0f, 0.0f,  extents.z, 0.0f, 1.0f, 0.0f,  0.0f, // 9: bottom-back
              half.x, -half.y,  half.z,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f, 1.0f, 0.0f,  0.0f, // 10: bottom-front
-             half.x,  half.y,  half.z,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f, 1.0f, 0.0f,  0.0f, // 11: top-front
+             half.x,  half.y,  half.z,  1.0f, 1.0f, 0.0f,  0.0f, extents.y, 1.0f, 0.0f,  0.0f, // 11: top-front
 
              // LEFT FACE (indices 12-15)
-             -half.x,  half.y,  half.z,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f, -1.0f, 0.0f,  0.0f, // 12: top-front
-             -half.x, -half.y,  half.z,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, -1.0f, 0.0f,  0.0f, // 13: bottom-front
+             -half.x,  half.y,  half.z,  1.0f, 0.0f, 0.0f,  extents.z, extents.y, -1.0f, 0.0f,  0.0f, // 12: top-front
+             -half.x, -half.y,  half.z,  0.0f, 1.0f, 0.0f,  extents.z, 0.0f, -1.0f, 0.0f,  0.0f, // 13: bottom-front
              -half.x, -half.y, -half.z,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f, -1.0f, 0.0f,  0.0f, // 14: bottom-back
-             -half.x,  half.y, -half.z,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f, -1.0f, 0.0f,  0.0f, // 15: top-back
+             -half.x,  half.y, -half.z,  1.0f, 1.0f, 0.0f,  0.0f, extents.y, -1.0f, 0.0f,  0.0f, // 15: top-back
 
              // TOP FACE (indices 16-19)
-             -half.x,  half.y, -half.z,  1.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // 16: back-left
-              half.x,  half.y, -half.z,  0.0f, 1.0f, 0.0f,  1.0f, 1.0f, 0.0f, 1.0f, 0.0f, // 17: back-right
-              half.x,  half.y,  half.z,  0.0f, 0.0f, 1.0f,  1.0f, 0.0f, 0.0f, 1.0f, 0.0f, // 18: front-right
+             -half.x,  half.y, -half.z,  1.0f, 0.0f, 0.0f,  0.0f, extents.z, 0.0f, 1.0f, 0.0f, // 16: back-left
+              half.x,  half.y, -half.z,  0.0f, 1.0f, 0.0f,  extents.x, extents.z, 0.0f, 1.0f, 0.0f, // 17: back-right
+              half.x,  half.y,  half.z,  0.0f, 0.0f, 1.0f,  1.0f, extents.y, 0.0f, 1.0f, 0.0f, // 18: front-right
              -half.x,  half.y,  half.z,  1.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f, 0.0f, // 19: front-left
 
              // BOTTOM FACE (indices 20-23)
-             -half.x, -half.y,  half.z,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f,  0.0f, -1.0f, 0.0f, // 20: front-left
-              half.x, -half.y,  half.z,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f, 0.0f, -1.0f, 0.0f,  // 21: front-right
-              half.x, -half.y, -half.z,  0.0f, 0.0f, 1.0f,  1.0f, 1.0f, 0.0f, -1.0f, 0.0f, // 22: back-right
+             -half.x, -half.y,  half.z,  1.0f, 0.0f, 0.0f,  0.0f, 0.0f, extents.z, -1.0f, 0.0f, // 20: front-left
+              half.x, -half.y,  half.z,  0.0f, 1.0f, 0.0f,  1.0f, extents.x,  extents.z, -1.0f, 0.0f,  // 21: front-right
+              half.x, -half.y, -half.z,  0.0f, 0.0f, 1.0f,  1.0f, extents.x, 0.0f, -1.0f, 0.0f, // 22: back-right
              -half.x, -half.y, -half.z,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f, -1.0f, 0.0f   // 23: back-left
         };
 
@@ -206,6 +211,100 @@ namespace GAMEDEV_ENGINE
 
         vertexLayout.stride = sizeof(float) * 11;
         auto result = std::make_shared<GAMEDEV_ENGINE::Mesh>(vertexLayout, vertices, indices);
+        return result;
+    }
+
+    std::shared_ptr<Mesh> Mesh::CreateSphere(float radius, int sectors, int stacks)
+    {
+        const float PI = 3.14159265358979323846f;
+        std::vector<float> vertices((stacks + 1) * (sectors + 1) * 8);
+        for (int i = 0; i <= stacks; ++i)
+        {
+            float stackAngle = PI / 2.0f - static_cast<float>(i) * (PI / static_cast<float>(stacks)); // from -PI/2 to PI/2
+            float xy = radius * cosf(stackAngle); // x-y plane radius at this stack
+            float z = radius * sinf(stackAngle); // z coordinates
+
+            for (int j = 0; j <= sectors; ++j)
+            {
+                float sectorAngle = static_cast<float>(j) * (2.0f * PI / static_cast<float>(sectors)); // from 0 to 2PI
+                float x = xy * cosf(sectorAngle); 
+                float y = xy * sinf(sectorAngle); 
+
+                size_t vertexStart = (i * (sectors + 1) + j) * 8;
+
+                // Position
+                vertices[vertexStart] = x;
+                vertices[vertexStart + 1] = y;
+                vertices[vertexStart + 2] = z;
+
+                // Normal (normalized position vector)
+                float length = sqrtf(x * x + y * y + z * z);
+                vertices[vertexStart + 3] = x / length;
+                vertices[vertexStart + 4] = y / length;
+                vertices[vertexStart + 5] = z / length;
+
+                // UV coordinates
+                vertices[vertexStart + 6] = static_cast<float>(j) / static_cast<float>(sectors);
+                vertices[vertexStart + 7] = static_cast<float>(i) / static_cast<float>(stacks);
+
+            }
+
+        }
+        // Generate Indices
+        std::vector<unsigned int> indices;
+        for (int i = 0; i < stacks; ++i)
+        {
+            int k1 = i * (sectors + 1);
+            int k2 = k1 + sectors + 1;
+
+            for (int j = 0; j < sectors; ++j, ++k1, ++k2)
+            {
+                if (i != 0)
+                {
+                    indices.push_back(k1);
+                    indices.push_back(k2);
+                    indices.push_back(k1 + 1);
+                }
+
+                if (i != (stacks - 1))
+                {
+                    indices.push_back(k1 + 1);
+                    indices.push_back(k2);
+                    indices.push_back(k2 + 1);
+                }
+            }
+        }
+
+        VertexLayout vertexLayout;
+
+        // Position
+        vertexLayout.elements.push_back(
+            {
+                VertexElement::PositionIndex,
+                3,
+                GL_FLOAT,
+                0
+            });
+
+        // Normal
+        vertexLayout.elements.push_back(
+            {
+                VertexElement::NormalIndex,
+                3,
+                GL_FLOAT,
+                sizeof(float) * 3
+            });
+        // UV Index
+        vertexLayout.elements.push_back(
+            {
+                VertexElement::UVIndex,
+                2,
+                GL_FLOAT,
+                sizeof(float) * 6
+            });
+        vertexLayout.stride = sizeof(float) * 8;
+
+        auto result = std::make_shared<Mesh>(vertexLayout, vertices, indices); // here we create a mesh
         return result;
     }
 

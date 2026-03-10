@@ -2,7 +2,7 @@
 #include <memory>
 #include <unordered_map>
 #include <string>
-
+#include <glm/vec3.hpp>
 // need unordered map for texture  management in material later
 namespace GAMEDEV_ENGINE 
 {
@@ -24,6 +24,9 @@ namespace GAMEDEV_ENGINE
         // to set the float with two value
         void SetFloatParams2f(const std::string& name, float v0, float v1);
 
+        // to set the float with 3 value 
+        void SetFloatParams3f(const std::string& name, const glm::vec3& value);
+
         // to set the texture
         void SetTextureParams(const std::string& name,const std::shared_ptr<Texture>& texture);
 
@@ -43,5 +46,7 @@ namespace GAMEDEV_ENGINE
         // adding container for texture
         std::unordered_map<std::string, std::shared_ptr<Texture>> _mTextureContainers;
 
+        // to color setup different
+        std::unordered_map<std::string, glm::vec3> _mFloat3Params;
     };
 }

@@ -1,4 +1,4 @@
-#include "Engine/Physics/RigidBody.h"
+﻿#include "Engine/Physics/RigidBody.h"
 #include "Engine/Engine.h"
 #include <btBulletCollisionCommon.h>
 #include <btBulletDynamicsCommon.h>
@@ -6,10 +6,10 @@
 namespace GAMEDEV_ENGINE
 {
 	RigidBody::RigidBody(BodyType type, const std::shared_ptr<Collider>& collider, float mass, float friction)
-		: _mBodyType{type},
-		_mBodyCollider{collider},
-		_mBodyMass{mass},
-		_mBodyFriction{friction}
+		: _mBodyType{ type },
+		_mBodyCollider{ collider },
+		_mBodyMass{ mass },
+		_mBodyFriction{ friction }
 	{
 		if (!_mBodyCollider)
 		{
@@ -24,11 +24,12 @@ namespace GAMEDEV_ENGINE
 
 		btTransform transform;
 		transform.setIdentity();
-		btDefaultMotionState* motionState = new btDefaultMotionState(transform);
+		_mMotionState = std::make_unique<btDefaultMotionState>(transform);
+
 		
 		btRigidBody::btRigidBodyConstructionInfo info(
 			(_mBodyType == BodyType::Dynamic) ? btScalar(mass) : btScalar(0.0),
-			motionState,
+			_mMotionState.get(),   // ← was: motionState
 			_mBodyCollider->GetShape(),
 			inertia
 		);
@@ -84,6 +85,10 @@ namespace GAMEDEV_ENGINE
 
 	glm::vec3 RigidBody::GetBodyPosition() const
 	{
+		if (!_mRigidBody)
+		{
+			return glm::vec3( 0.0f, 0.0f, 0.0f);
+		}
 		const auto& pos = _mRigidBody->getWorldTransform().getOrigin();
 		return glm::vec3(pos.x(), pos.y(), pos.z());
 	}
@@ -103,7 +108,24 @@ namespace GAMEDEV_ENGINE
 	}
 	glm::quat RigidBody::GetBodyRotation() const
 	{
+		if (!_mRigidBody)
+		{
+			return glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+		}
 		const auto& rot = _mRigidBody->getWorldTransform().getRotation();
 		return glm::quat(rot.w(),rot.x(), rot.y(), rot.z());
+	}
+
+	void RigidBody::ApplyImpulse(const glm::vec3& impulse)
+	{
+		if (!_mRigidBody)
+		{
+			return;
+		}
+		_mRigidBody->applyCentralImpulse(btVector3(
+			btScalar(impulse.x),
+			btScalar(impulse.y),
+			btScalar(impulse.z)
+		));
 	}
 }

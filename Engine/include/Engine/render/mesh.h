@@ -26,12 +26,17 @@ namespace GAMEDEV_ENGINE
             Mesh& operator=(const Mesh&) = delete;
         // bind 
             void Bind();
+            void Unbind();
             void Draw();
         
          // need to create a load file to read gltf file
 
             static std::shared_ptr<Mesh> CreateBox(const glm::vec3& extents = glm::vec3(1.0f));
            /* static std::shared_ptr<Mesh> Load(const std::string& path);*/
+
+            // to create a sphere
+            static std::shared_ptr<Mesh> CreateSphere(float radius, int sectors, int stacks); // sectors and stacks define how smooth the bullet will be
+
         private:
             GLuint _mVAO = 0; // Vertex Array Object
             GLuint _mVBO = 0; // Vertex Buffer Object

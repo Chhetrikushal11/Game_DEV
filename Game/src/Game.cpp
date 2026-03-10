@@ -221,7 +221,7 @@
    //  player->SetPosition(glm::vec3(0.0f, 1.0f, 7.0f));
     std::cout << "Game Initialized" << std::endl;
 #endif
-    auto scene = Scene::Load("scenes/scene1.sc");
+    auto scene = Scene::Load("scenes/scene2.sc");
     _mScene = scene;
     Engine::GetInstance().SetCurrentScene(scene.get());
     return true;

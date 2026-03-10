@@ -11,6 +11,7 @@
 #include "Engine/scene/Scene.h"
 #include "Engine/io/AssetFileSystem.h"
 #include "Engine/Physics/PhysicsManager.h"
+#include "Engine/audio/AudioManager.h"
 
 namespace GAMEDEV_ENGINE 
 {
@@ -63,6 +64,9 @@ namespace GAMEDEV_ENGINE
         // now to get the physics manager
         PhysicsManager& GetPhysicsManager() { return _mPhyicsManager;  }
 
+        // now to get the audio manager
+        AudioManager& GetAudioManager() { return _mAudioManager; }
+
         GLFWwindow* GetWindow() const { return _gWindow; }
         private:
         Application* _mApplication;
@@ -78,5 +82,7 @@ namespace GAMEDEV_ENGINE
         TextureManager _mTextureManager;
         // for handling PhysicsManager
         PhysicsManager _mPhyicsManager;
+        // for handlling audioManager
+        AudioManager _mAudioManager;
     };
 }

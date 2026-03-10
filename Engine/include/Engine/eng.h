@@ -23,5 +23,7 @@
 #include "Engine/scene/Component/PlayerControllerComponent.h"
 #include "Engine/scene/Component/KinematicControllerComponent.h"
 #include "Engine/scene/Component/AnimationComponent.h"
+#include "Engine/scene/Component/AudioComponent.h"
+#include "Engine/scene/Component/AudioListenerComponent.h"
 #include "Engine/Physics/PhysicsManager.h"
 #include "io/AssetFileSystem.h"

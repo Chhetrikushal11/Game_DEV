@@ -139,6 +139,14 @@ namespace GAMEDEV_ENGINE
         
     }
 
+    void GraphicsAPI::UnbindMesh(Mesh* mesh)
+    {
+        if (mesh)
+        {
+            mesh->Unbind();
+        }
+    }
+
 
     void GraphicsAPI::DrawMesh(Mesh* mesh)
     {
@@ -197,7 +205,7 @@ namespace GAMEDEV_ENGINE
             struct Light
             {
                 vec3 color;
-                vec3 position;
+                vec3 direction;
             };
 
             uniform Light uLight;
@@ -218,7 +226,7 @@ namespace GAMEDEV_ENGINE
                 vec3 norm = normalize(vNormal);
                 
                 // diffuse components
-                vec3 lightDir = normalize(uLight.position - vFragPos);
+                vec3 lightDir = normalize(-uLight.direction);
                 float diff = max(dot(norm, lightDir),0.0);
                 vec3 diffuse = diff * uLight.color;
 
@@ -229,7 +237,10 @@ namespace GAMEDEV_ENGINE
                 float specularStrength = 0.5;
                 vec3 specular = specularStrength * spec * uLight.color;
                 
-                vec3 result = diffuse + specular;
+                // ambient
+                const float ambientStrength = 0.4;
+                vec3 ambient = ambientStrength * uLight.color;
+                vec3 result = diffuse + specular + ambient;
 
                 vec4 texColor = texture(baseColorTexture, vUV);
 

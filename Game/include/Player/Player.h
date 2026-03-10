@@ -13,5 +13,7 @@ namespace GAMEDEV_ENGINE
 
 	private:
 		AnimationComponent* _mAnimationComponent = nullptr;
+		AudioComponent* _mAudioComponent = nullptr;
+		PlayerControllerComponent* _mPlayerControllerComponent = nullptr;
 	};
 }
